@@ -1,9 +1,17 @@
 const questionUtil = require('./questionUtil');
 const Soldier = require('./soldier');
 const Vehicle = require('./vehicle');
+const BattleSimulator = require('./battle-simulator');
 
 let s = new Soldier(100, 50, 1);
 let v = new Vehicle(100, 2000);
+
+let bs = new BattleSimulator();
+bs.addArmy("BLUE");
+bs.addArmy("RED");
+bs.addArmy("GREEN");
+bs.setAllies("BLUE", "RED");
+
 
 
 // const askHowAreYou = async () => {
