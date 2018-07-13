@@ -16,6 +16,10 @@ class Unit {
     isActive() {
         throw new Error(`You have to implement method ${this.isActive.name} in all subclasses of Unit class`);
     }
+
+    takeDamage(damage) {
+        throw new Error(`You have to implement method ${this.takeDamage.name} in all subclasses of Unit class`);
+    }
 }
 
 module.exports = Unit;

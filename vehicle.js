@@ -1,4 +1,5 @@
 const Unit = require('./unit');
+const Constants = require('./constants');
 
 class Vehicle extends Unit {
 
@@ -21,12 +22,12 @@ class Vehicle extends Unit {
     computeAttackProb() {
         const attackProbsProduct = this._soldiers.reduce((accum, curSoldier) => accum + curSoldier.computeAttackProb(), 1.0);
         const attackProbsGeomAvg =  Math.pow(attackProbsProduct, 1.0 / this._soldiers.length);
-        return 0.5 * (1 + this._health / 100.0) * attackProbsGeomAvg; 
+        return Constants.VEHICLE_ATTACK_PONDER * (1.0 + this._health / Constants.VEHICLE_HEALTH_NORMALIZER) * attackProbsGeomAvg; 
     }
 
     computeDamage(){
         const totalSoldiersXP = this._soldiers.reduce((accum, curSoldier) => accum + curSoldier._experience);
-        return 0.1 + totalSoldiersXP / 100.0;
+        return Constants.VEHICLE_MIN_DAMAGE + totalSoldiersXP / Constants.VEHICLE_OPERATOR_XP_NORMALIZER;
     }
 
     isActive() {
@@ -34,7 +35,27 @@ class Vehicle extends Unit {
         return someSoldierAlive && this._health >= 0;
     }
 
-    // implement the case when the vehicle is killed - all operators should be killed
+    takeDamage(damage){
+        
+        this._health -= damage * Constants.VEHICLE_DAMAGE_INTAKE;
+        
+        let randomIndex = Math.random() * this._soldiers.length;
+        let randomSoldier = this._soldiers[randomIndex];
+        randomSoldier.takeDamage( damage * Constants.MAIN_SOLDIER_DAMAGE_INTAKE );
+
+        let restOfDamage = damage * Constants.OTHER_SOLDIERS_DAMAGE_INTAKE;
+        let restOfSoldiersNo = this._soldiers.length - 1;
+        let damagePerSoldier = restOfDamage / restOfSoldiersNo;
+
+        this._soldiers.forEach((soldier, soldierIndex) => {
+            if (soldierIndex != randomIndex)
+                soldier.takeDamage(damagePerSoldier);
+        });
+
+        // // check if the vehicle is dead and signal to higher instances
+        // implement the case when the vehicle is killed - all operators should be killed
+    }
+
 }
 
 module.exports = Vehicle;
