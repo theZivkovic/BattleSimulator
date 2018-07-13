@@ -1,5 +1,4 @@
 const Unit = require('./unit');
-const { geomAvg } = require('./mathUtil');
 
 class Vehicle extends Unit {
 
@@ -24,7 +23,6 @@ class Vehicle extends Unit {
         const attackProbsGeomAvg =  Math.pow(attackProbsProduct, 1.0 / this._soldiers.length);
         return 0.5 * (1 + this._health / 100.0) * attackProbsGeomAvg; 
     }
-
 
     computeDamage(){
         const totalSoldiersXP = this._soldiers.reduce((accum, curSoldier) => accum + curSoldier._experience);
