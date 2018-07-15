@@ -8,9 +8,11 @@ class BattleSimulator {
         this._armiesCache = new Array();
     }
 
-    _getRandomArmy(){
-        const randomIndex = Math.floor(Math.random() * this._armiesCache.length);
-        return this._armiesCache[randomIndex];
+    _getRandomDeffender(attackerArmyID){
+        let filteredArmies = this._armiesCache.filter(army => army.getArmyID() != attackerArmyID);
+        const randomIndex = Math.floor(Math.random() * filteredArmies.length);
+        return filteredArmies[randomIndex];
+
     }
 
     addArmy(armyID, strategy) {
@@ -39,7 +41,7 @@ class BattleSimulator {
                 switch(attackingSquad.getStrategy()){
 
                     case StrategyChoices.RANDOM: 
-                        const targetArmy = this._getRandomArmy();
+                        const targetArmy = this._getRandomDeffender(attackingArmy.getArmyID());
                         const targetSquad = targetArmy.getRandomSquad();
                         
                         let attackerWinProb = attackingSquad.computeAttackProb();

@@ -9,6 +9,10 @@ class Army {
         this._squadsCache = new Array();
     }
 
+    getArmyID(){
+        return this._armyID;
+    }
+
     addSquad(squadID){
         const newSquad = new Squad(squadID, this._strategy);
         this._squads.set(squadID, newSquad);

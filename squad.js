@@ -22,7 +22,7 @@ class Squad {
     }
 
     computeDamage(){
-        return this._units.reduce((accum, curUnit) => accum + curUnit);
+        return this._units.reduce((accum, curUnit) => accum + curUnit.computeDamage(), 0.0);
     }
 
     isActive(){

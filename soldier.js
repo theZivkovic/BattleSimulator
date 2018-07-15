@@ -16,7 +16,7 @@ class Soldier extends Unit {
     }
 
     computeDamage(){
-        return Constants.SOLDIER_MIN_DAMAGE + this._experience / SOLDIER_DAMAGE_EXP_PONDER;
+        return Constants.SOLDIER_MIN_DAMAGE + this._experience / Constants.SOLDIER_DAMAGE_EXP_PONDER;
     }
 
     isActive(){
