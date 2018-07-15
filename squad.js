@@ -1,5 +1,5 @@
 const strategyChoices = require('./strategyChoices');
-const { SOLDIER_DEAD, VEHICLE_DEAD } = require('./battle-events');
+const { UNIT_DEAD} = require('./battle-events');
 
 class Squad {
 
@@ -11,12 +11,10 @@ class Squad {
 
     addUnit(someUnit){
         this._units.push(someUnit);
-        someUnit.subscribeToEvent(SOLDIER_DEAD, () => {
-            console.log('SOLDIER DEAD', someUnit.getUnitID());
-            this._units = this._units.filter(unit => unit.getUnitID() == someUnit.getUnitID());
-        });
-        someUnit.subscribeToEvent(VEHICLE_DEAD, () => {
-            console.log('VEHICLE DEAD', someUnit.getUnitID());
+
+        someUnit.subscribeToEvent(UNIT_DEAD, () => {
+            // TO-DO: deletion of a unit is costly, think about some smarter solution
+            console.log('UNIT DIED', someUnit.getUnitID());
             this._units = this._units.filter(unit => unit.getUnitID() == someUnit.getUnitID());
         });
     }

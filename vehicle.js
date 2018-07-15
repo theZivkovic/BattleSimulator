@@ -1,6 +1,6 @@
 const Unit = require('./unit');
 const Constants = require('./constants');
-const { VEHICLE_DEAD } = require('./battle-events');
+const { UNIT_DEAD } = require('./battle-events');
 
 class Vehicle extends Unit {
 
@@ -56,13 +56,10 @@ class Vehicle extends Unit {
             });
         }
 
-        //if (this._totalHealth() <= 0) {
-        this._eventEmmiter.emit(VEHICLE_DEAD, {});
-        //}
-
-        // // check if the vehicle is dead and signal to higher instances
-        // implement the case when the vehicle is killed - all operators should be killed
-        
+        if (this._totalHealth() <= 0) {
+            // check if the vehicle is dead and signal to higher instances
+            this._eventEmmiter.emit(UNIT_DEAD, {});
+        }
     }
 }
 
