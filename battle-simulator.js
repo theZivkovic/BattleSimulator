@@ -7,6 +7,7 @@ class BattleSimulator {
     constructor() {
         this._armies = new Map();
         this._armiesCache = new Array();
+        this._battleOver = false;
     }
 
     _getRandomDeffender(attackerArmyID){
@@ -25,6 +26,7 @@ class BattleSimulator {
             this._armies.delete(armyID);
             if (this._armiesCache.length <= 1){
                 console.log('BATTLE FINISHED');
+                this._battleOver = true;
             }
         });
     }
@@ -58,15 +60,17 @@ class BattleSimulator {
                         let attackerWinProb = attackingSquad.computeAttackProb();
                         let defenderWinProb = targetSquad.computeAttackProb();
 
-                        //if (attackerWinProb > defenderWinProb){
+                        if (attackerWinProb > defenderWinProb){
                             let damage = attackingSquad.computeDamage();
                             let previousSquadDamage = squadCasualties.get(targetSquad.getSquadID()) || 0.0;
                             squadCasualties.set(targetSquad.getSquadID(), previousSquadDamage + damage);
-                        //}
+                        }
                     break;
                 }
             });
         });
+
+        console.log('DAMAGE TAKEN IN THIS TURN:', squadCasualties);
 
         // apply damage to each squad
         this._armies.forEach((damagedArmy) => {
@@ -80,7 +84,8 @@ class BattleSimulator {
     }
 
     simulate() {
-        this._simulateOneTurn();
+        while(!this._battleOver)
+            this._simulateOneTurn();
     }
 }
 

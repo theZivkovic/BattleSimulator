@@ -27,10 +27,10 @@ class Soldier extends Unit {
     takeDamage(damage){
 
         this._health -= damage;
-        //if (!this.isActive()) {
+        if (!this.isActive()) {
             // check if the soldier is dead and signal it to the higher instances
             this._eventEmmiter.emit(UNIT_DEAD, {});            
-        //}
+        }
     }
 }
 

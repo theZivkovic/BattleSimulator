@@ -56,10 +56,10 @@ class Vehicle extends Unit {
             });
         }
 
-        //if (this._totalHealth() <= 0) {
+        if (this._totalHealth() <= 0) {
             // check if the vehicle is dead and signal to higher instances
             this._eventEmmiter.emit(UNIT_DEAD, {});
-        //}
+        }
     }
 }
 
