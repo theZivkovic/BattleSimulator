@@ -1,27 +1,21 @@
 const questionUtil = require('./questionUtil');
 const Soldier = require('./soldier');
 const Vehicle = require('./vehicle');
+const Army = require('./army');
+const Squad = require('./squad');
 const BattleSimulator = require('./battle-simulator');
-
-let s = new Soldier(100, 50, 1);
-let v = new Vehicle(100, 2000);
-
+const StrategyChoices = require('./strategyChoices');
 let bs = new BattleSimulator();
-bs.addArmy("BLUE");
-bs.addArmy("RED");
-bs.addArmy("GREEN");
-bs.setAllies("BLUE", "RED");
 
+bs.addArmy('RED', StrategyChoices.RANDOM);
+bs.addArmy('BLUE', StrategyChoices.STRONGEST);
 
+bs.addSquadToArmy("RED", "RED-INFRANTRY");
+bs.addSquadToArmy("RED", "RED-TANKS");
 
-// const askHowAreYou = async () => {
-//     const answer = await questionHelper('how are you?');
-//     console.log('The answer was ', answer);
-//     const answer2 = await questionHelper('how are you2?');
-//     console.log('The answer was ', answer2);
-//     const answer3 = await questionHelper('how are you3?');
-//     console.log('The answer was ', answer3);
-//     rl.close();
-// }
+bs.addUnitToSquad("RED", "RED-INFRANTRY", new Soldier(100, 200, 0));
+bs.addUnitToSquad("RED", "RED-INFRANTRY", new Soldier(100, 200, 0));
+bs.addUnitToSquad("RED", "RED-INFRANTRY", new Soldier(100, 200, 0));
+bs.addUnitToSquad("RED", "RED-INFRANTRY", new Soldier(100, 200, 0));
 
-// askHowAreYou();
+bs.simulate();

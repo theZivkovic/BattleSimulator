@@ -1,39 +1,58 @@
 const Army = require('./army');
+const StrategyChoices = require('./strategyChoices');
 
 class BattleSimulator {
 
-
     constructor() {
         this._armies = new Map();
-        this._alliesGraph = new Map();
+        this._armiesCache = new Array();
     }
 
-    addArmy(armyID) {
-        this._armies.set(armyID, new Army(armyID));
+    _getRandomArmy(){
+        const randomIndex = Math.floor(Math.random() * this._armiesCache.length);
+        return this._armiesCache[randomIndex];
     }
 
-    setAllies(armyID1, armyID2){
-        
-        if (!this._armies.get(armyID1) ||
-            !this._armies.get(armyID2))
-            throw new Error('Both armies must exist in BattleSimulator:setAllies');
-
-        if (!this._alliesGraph.get(armyID1))
-            this._alliesGraph.set(armyID1, new Map());
-
-        this._alliesGraph.get(armyID1).set(armyID2, true);
-
-        if (!this._alliesGraph.get(armyID2))
-            this._alliesGraph.set(armyID2, new Map());
-
-        this._alliesGraph.get(armyID2).set(armyID1, true);
-        console.log(this._alliesGraph);
+    addArmy(armyID, strategy) {
+        const newArmy = new Army(armyID, strategy);
+        this._armies.set(armyID, newArmy);
+        this._armiesCache.push(newArmy);
     }
 
-    deleteAlliance(armyID1, armyID2){
-        this._alliesGraph.get(armyID1).delete(armyID2);
-        this._alliesGraph.get(armyID2).delete(armyID1);
-        console.log(this._alliesGraph);
+    addSquadToArmy(armyID, squadID) {
+        let targetArmy = this._armies.get(armyID);
+        targetArmy.addSquad(squadID, targetArmy.getStrategy());
+    }
+
+    addUnitToSquad(armyID, squadID, someUnit){
+        let targetArmy = this._armies.get(armyID);
+        let targetSquad = targetArmy.getSquad(squadID);
+        targetSquad.addUnit(someUnit);
+    }
+
+    simulate() {
+
+        this._armies.forEach((attackingArmy) => {
+
+            attackingArmy.forEachSquad((attackingSquad) => {
+                
+                switch(attackingSquad.getStrategy()){
+
+                    case StrategyChoices.RANDOM: 
+                        const targetArmy = this._getRandomArmy();
+                        const targetSquad = targetArmy.getRandomSquad();
+                        
+                        let attackerWinProb = attackingSquad.computeAttackProb();
+                        let defenderWinProb = targetSquad.computeAttackProb();
+
+                        if (attackerWinProb > defenderWinProb){
+                            let damage = attackingSquad.computeDamage();
+                            targetSquad.takeDamage(damage);
+                        }
+                    break;
+                }
+            });
+        });
     }
 }
 

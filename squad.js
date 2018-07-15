@@ -2,13 +2,18 @@ const strategyChoices = require('./strategyChoices');
 
 class Squad {
 
-    constructor(strategy){
-        this._units = new Array();
+    constructor(squadID, strategy){
+        this._squadID = squadID;
         this._strategy = strategy;
+        this._units = new Array();
     }
 
     addUnit(someUnit){
         this._units.push(someUnit);
+    }
+
+    getStrategy(){
+        return this._strategy;
     }
 
     computeAttackProb(){
@@ -23,4 +28,13 @@ class Squad {
     isActive(){
         return this._units.some(unit => unit.isActive());
     }
+
+    takeDamage(damage){
+        let damagePerUnit = damage / this._units.length;
+        this._units.forEach((unit) => {
+            unit.takeDamage(damagePerUnit);
+        });
+    }
 }
+
+module.exports = Squad;
