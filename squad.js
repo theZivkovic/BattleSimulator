@@ -1,5 +1,6 @@
 const strategyChoices = require('./strategyChoices');
-const { UNIT_DEAD} = require('./battle-events');
+const EventEmmiter = require('events');
+const { UNIT_DEAD, SQUAD_DEAD } = require('./battle-events');
 
 class Squad {
 
@@ -7,6 +8,15 @@ class Squad {
         this._squadID = squadID;
         this._strategy = strategy;
         this._units = new Array();
+        this._eventEmmiter = new EventEmmiter();
+    }
+
+    getSquadID(){
+        return this._squadID;
+    }
+
+    getStrategy(){
+        return this._strategy;
     }
 
     addUnit(someUnit){
@@ -16,11 +26,10 @@ class Squad {
             // TO-DO: deletion of a unit is costly, think about some smarter solution
             console.log('UNIT DIED', someUnit.getUnitID());
             this._units = this._units.filter(unit => unit.getUnitID() == someUnit.getUnitID());
-        });
-    }
 
-    getStrategy(){
-        return this._strategy;
+            if (this._units.length == 0)
+                this._eventEmmiter.emit(SQUAD_DEAD, {});
+        });
     }
 
     computeAttackProb(){
@@ -41,6 +50,10 @@ class Squad {
         this._units.forEach((unit) => {
             unit.takeDamage(damagePerUnit);
         });
+    }
+
+    subscribeToEvent(eventName, listener){
+        this._eventEmmiter.on(eventName, listener);
     }
 }
 

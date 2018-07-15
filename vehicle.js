@@ -16,7 +16,7 @@ class Vehicle extends Unit {
     }
 
     _totalHealth() {
-        const totalSoldiersHP = this._soldiers.reduce((accum, current) => accum + current);
+        const totalSoldiersHP = this._soldiers.reduce((accum, currentSoldier) => accum + currentSoldier._health, 0.0);
         return totalSoldiersHP / this._soldiers.length + this._health;
     }
 
@@ -56,10 +56,10 @@ class Vehicle extends Unit {
             });
         }
 
-        if (this._totalHealth() <= 0) {
+        //if (this._totalHealth() <= 0) {
             // check if the vehicle is dead and signal to higher instances
             this._eventEmmiter.emit(UNIT_DEAD, {});
-        }
+        //}
     }
 }
 

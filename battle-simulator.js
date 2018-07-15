@@ -1,5 +1,6 @@
 const Army = require('./army');
 const StrategyChoices = require('./strategyChoices');
+const { ARMY_DEAD } = require('./battle-events');
 
 class BattleSimulator {
 
@@ -18,6 +19,14 @@ class BattleSimulator {
         const newArmy = new Army(armyID, strategy);
         this._armies.set(armyID, newArmy);
         this._armiesCache.push(newArmy);
+        newArmy.subscribeToEvent(ARMY_DEAD, () => {
+            console.log('ARMY DIED:', armyID);
+            this._armiesCache = this._armiesCache.filter(army => army.getArmyID() != armyID);
+            this._armies.delete(armyID);
+            if (this._armiesCache.length <= 1){
+                console.log('BATTLE FINISHED');
+            }
+        });
     }
 
     addSquadToArmy(armyID, squadID) {
@@ -31,8 +40,11 @@ class BattleSimulator {
         targetSquad.addUnit(someUnit);
     }
 
-    simulate() {
+    _simulateOneTurn() {
 
+        let squadCasualties = new Map();
+
+        // calculate damage taken by each squad
         this._armies.forEach((attackingArmy) => {
 
             attackingArmy.forEachSquad((attackingSquad) => {
@@ -48,12 +60,27 @@ class BattleSimulator {
 
                         //if (attackerWinProb > defenderWinProb){
                             let damage = attackingSquad.computeDamage();
-                            targetSquad.takeDamage(damage);
+                            let previousSquadDamage = squadCasualties.get(targetSquad.getSquadID()) || 0.0;
+                            squadCasualties.set(targetSquad.getSquadID(), previousSquadDamage + damage);
                         //}
                     break;
                 }
             });
         });
+
+        // apply damage to each squad
+        this._armies.forEach((damagedArmy) => {
+            damagedArmy.forEachSquad((damagedSquad) => {
+                let damageTakenBySquad = squadCasualties.get(damagedSquad.getSquadID());
+                if (!damageTakenBySquad)
+                    return;
+                damagedSquad.takeDamage(damageTakenBySquad);
+            });
+        });
+    }
+
+    simulate() {
+        this._simulateOneTurn();
     }
 }
 
