@@ -1,11 +1,12 @@
 const Unit = require('./unit');
 const Constants = require('./constants');
 const { randomInRange } = require('./mathUtil');
+const { SOLDIER_DEAD } = require('./battle-events');
 
 class Soldier extends Unit {
 
-    constructor(health, rechargeTime, experience){
-        super(health, rechargeTime);
+    constructor(unitID, health, rechargeTime, experience){
+        super(unitID, health, rechargeTime);
         this._experience = experience;
     }
 
@@ -24,10 +25,12 @@ class Soldier extends Unit {
     }
 
     takeDamage(damage){
+
         this._health -= damage;
-        if (!this.isActive()) {
+        //if (!this.isActive()) {
             // check if the soldier is dead and signal it to the higher instances
-        }
+            this._eventEmmiter.emit(SOLDIER_DEAD, {});            
+        //}
     }
 }
 

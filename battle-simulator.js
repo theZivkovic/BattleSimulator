@@ -12,7 +12,6 @@ class BattleSimulator {
         let filteredArmies = this._armiesCache.filter(army => army.getArmyID() != attackerArmyID);
         const randomIndex = Math.floor(Math.random() * filteredArmies.length);
         return filteredArmies[randomIndex];
-
     }
 
     addArmy(armyID, strategy) {
@@ -47,10 +46,10 @@ class BattleSimulator {
                         let attackerWinProb = attackingSquad.computeAttackProb();
                         let defenderWinProb = targetSquad.computeAttackProb();
 
-                        if (attackerWinProb > defenderWinProb){
+                        //if (attackerWinProb > defenderWinProb){
                             let damage = attackingSquad.computeDamage();
                             targetSquad.takeDamage(damage);
-                        }
+                        //}
                     break;
                 }
             });

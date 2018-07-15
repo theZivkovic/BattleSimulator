@@ -1,11 +1,12 @@
 const Unit = require('./unit');
 const Constants = require('./constants');
+const { VEHICLE_DEAD } = require('./battle-events');
 
 class Vehicle extends Unit {
 
-    constructor(health, rechargeTime) {
+    constructor(unitID, health, rechargeTime) {
         // TO-DO - add constraint for recharge (>1000ms)
-        super(health, rechargeTime);
+        super(unitID, health, rechargeTime);
         this._soldiers = new Array();
     }
 
@@ -26,7 +27,7 @@ class Vehicle extends Unit {
     }
 
     computeDamage(){
-        const totalSoldiersXP = this._soldiers.reduce((accum, curSoldier) => accum + curSoldier._experience);
+        const totalSoldiersXP = this._soldiers.reduce((accum, curSoldier) => accum + curSoldier._experience, 0.0);
         return Constants.VEHICLE_MIN_DAMAGE + totalSoldiersXP / Constants.VEHICLE_OPERATOR_XP_NORMALIZER;
     }
 
@@ -39,23 +40,30 @@ class Vehicle extends Unit {
         
         this._health -= damage * Constants.VEHICLE_DAMAGE_INTAKE;
         
-        let randomIndex = Math.random() * this._soldiers.length;
-        let randomSoldier = this._soldiers[randomIndex];
-        randomSoldier.takeDamage( damage * Constants.MAIN_SOLDIER_DAMAGE_INTAKE );
+        if (this._soldiers.length > 0){
 
-        let restOfDamage = damage * Constants.OTHER_SOLDIERS_DAMAGE_INTAKE;
-        let restOfSoldiersNo = this._soldiers.length - 1;
-        let damagePerSoldier = restOfDamage / restOfSoldiersNo;
+            let randomIndex = Math.random() * this._soldiers.length;
+            let randomSoldier = this._soldiers[randomIndex];
+            randomSoldier.takeDamage( damage * Constants.MAIN_SOLDIER_DAMAGE_INTAKE );
 
-        this._soldiers.forEach((soldier, soldierIndex) => {
-            if (soldierIndex != randomIndex)
-                soldier.takeDamage(damagePerSoldier);
-        });
+            let restOfDamage = damage * Constants.OTHER_SOLDIERS_DAMAGE_INTAKE;
+            let restOfSoldiersNo = this._soldiers.length - 1;
+            let damagePerSoldier = restOfDamage / restOfSoldiersNo;
+
+            this._soldiers.forEach((soldier, soldierIndex) => {
+                if (soldierIndex != randomIndex)
+                    soldier.takeDamage(damagePerSoldier);
+            });
+        }
+
+        //if (this._totalHealth() <= 0) {
+        this._eventEmmiter.emit(VEHICLE_DEAD, {});
+        //}
 
         // // check if the vehicle is dead and signal to higher instances
         // implement the case when the vehicle is killed - all operators should be killed
+        
     }
-
 }
 
 module.exports = Vehicle;
