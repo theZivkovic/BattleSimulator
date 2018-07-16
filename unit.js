@@ -1,11 +1,25 @@
 const EventEmmiter = require('events');
+const { UNIT_RECHARGED } = require('./battle-events');
 
 class Unit {
 
     constructor(health, rechargeTime){
         this._health = health;
-        this._rechargeTIme = rechargeTime;
+        this._rechargeTime = rechargeTime;
         this._eventEmmiter = new EventEmmiter();
+        this._recharged = true;
+    }
+
+    restartRechargeTimer(){
+        this._recharged = false;
+        setTimeout(() => {
+            this._recharged = true;
+            this._eventEmmiter.emit(UNIT_RECHARGED, {rechargedUnit: this});
+        }, this._rechargeTime);
+    }
+
+    isRecharged(){
+        return this._recharged;
     }
 
     computeAttackProb() {

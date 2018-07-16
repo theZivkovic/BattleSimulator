@@ -32,6 +32,7 @@ class BattleSimulator {
             this._armies.delete(deadArmy._armyID);
             if (this._armiesCache.length <= 1){
                 Logger.logArmy(this._armiesCache[0], 'won the battle!');
+                console.log('BATTLE OVER!');
                 this._battleOver = true;
             }
         });
@@ -69,6 +70,13 @@ class BattleSimulator {
 
             attackingArmy.forEachSquad((attackingSquad) => {
                 
+                let canAttack = attackingSquad.isRechargedForTheAttack();
+                
+                if (!canAttack){
+                    Logger.logSquad(attackingSquad, 'not ready for the attack, still recharging');
+                    return;
+                }
+
                 switch(attackingSquad.getStrategy()){
 
                     case StrategyChoices.RANDOM: 
@@ -82,6 +90,7 @@ class BattleSimulator {
                             let damage = attackingSquad.computeDamage();
                             let previousSquadDamage = squadCasualties.get(targetSquad.getSquadID()) || 0.0;
                             squadCasualties.set(targetSquad.getSquadID(), previousSquadDamage + damage);
+                            attackingSquad.restartRechargeTimers();
                             attackingSquad.increaseExperience();
                             Logger.logSquad(attackingSquad, `attacked enemy squad, dealth ${damage} damage`);
                         }

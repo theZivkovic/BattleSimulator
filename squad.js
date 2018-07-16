@@ -1,6 +1,6 @@
 const strategyChoices = require('./strategyChoices');
 const EventEmmiter = require('events');
-const { UNIT_DEAD, SQUAD_DEAD } = require('./battle-events');
+const { UNIT_DEAD, UNIT_RECHARGED, SQUAD_DEAD } = require('./battle-events');
 const { Logger } = require('./logger');
 
 class Squad {
@@ -8,6 +8,7 @@ class Squad {
     constructor(strategy){
         this._strategy = strategy;
         this._units = new Array();
+        this._rechargedUnitsMap = new Map();
         this._eventEmmiter = new EventEmmiter();
     }
 
@@ -25,10 +26,16 @@ class Squad {
         });
     }
 
+    isRechargedForTheAttack() {
+        return this._rechargedUnitsMap.size === this._units.length;
+    }
+
     addUnit(someUnit){
+        
         this._units.push(someUnit);
         someUnit._squadID = this._squadID;
         someUnit._armyID = this._armyID;
+
         someUnit.subscribeToEvent(UNIT_DEAD, ({deadUnit}) => {
             Logger.logUnit(deadUnit, 'died!');
             this._units = this._units.filter(unit => unit._unitID != deadUnit._unitID);
@@ -36,6 +43,12 @@ class Squad {
                 this._eventEmmiter.emit(SQUAD_DEAD, {deadSquad: this});
         });
 
+        someUnit.subscribeToEvent(UNIT_RECHARGED, ({rechargedUnit}) => {
+            console.log('Unit recharged:', rechargedUnit._unitID);
+            this._rechargedUnitsMap.set(rechargedUnit._unitID, true);
+        });
+
+        this._rechargedUnitsMap.set(someUnit._unitID, true);
         return someUnit;
     }
 
@@ -57,6 +70,13 @@ class Squad {
         this._units.forEach((unit) => {
             unit.takeDamage(damagePerUnit);
         });
+    }
+
+    restartRechargeTimers(){
+        this._units.forEach((unit) => {
+            unit.restartRechargeTimer();
+        });
+        this._rechargedUnitsMap.clear();
     }
 
     subscribeToEvent(eventName, listener){
