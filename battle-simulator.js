@@ -1,4 +1,4 @@
-const Logger = require('./logger');
+const { Logger } = require('./logger');
 const Army = require('./army');
 const StrategyChoices = require('./strategyChoices');
 const Vehicle = require('./vehicle');

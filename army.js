@@ -1,5 +1,5 @@
 const EventEmmiter = require('events');
-const Logger = require('./logger');
+const { Logger } = require('./logger');
 const Squad = require('./squad');
 const { SQUAD_DEAD, ARMY_DEAD } = require('./battle-events');
 

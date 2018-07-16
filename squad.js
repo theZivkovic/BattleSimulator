@@ -1,7 +1,7 @@
 const strategyChoices = require('./strategyChoices');
 const EventEmmiter = require('events');
 const { UNIT_DEAD, SQUAD_DEAD } = require('./battle-events');
-const Logger = require('./logger');
+const { Logger } = require('./logger');
 
 class Squad {
 

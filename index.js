@@ -5,7 +5,10 @@ const Army = require('./army');
 const Squad = require('./squad');
 const BattleSimulator = require('./battle-simulator');
 const StrategyChoices = require('./strategyChoices');
-const Logger = require('./logger');
+
+const { Logger, LoggerOutput } = require('./logger');
+Logger.initialize(LoggerOutput.TO_FILE);
+
 let bs = new BattleSimulator();
 
 const redArmy = bs.addArmy(new Army(StrategyChoices.RANDOM));
@@ -19,7 +22,6 @@ bs.addUnitToSquad(redInfrantry, new Soldier(100, 200, 5));
 const vehicle = bs.addUnitToSquad(redInfrantry, new Vehicle(100, 1500));
 bs.addSoldierToVehicle(vehicle, new Soldier(100, 200, 10));
 bs.addSoldierToVehicle(vehicle, new Soldier(100, 200, 11));
-
 
 const blueArmy = bs.addArmy(new Army(StrategyChoices.RANDOM));
 const blueInfrantry = bs.addSquadToArmy(blueArmy, new Squad(StrategyChoices.RANDOM));
