@@ -61,6 +61,12 @@ class Vehicle extends Unit {
             this._eventEmmiter.emit(UNIT_DEAD, {deadUnit: this});
         }
     }
+
+    increaseExperience(){
+        this._soldiers.forEach((soldier) => {
+            soldier.increaseExperience();
+        });
+    }
 }
 
 module.exports = Vehicle;

@@ -1,3 +1,4 @@
+const Logger = require('./logger');
 const Army = require('./army');
 const StrategyChoices = require('./strategyChoices');
 const Vehicle = require('./vehicle');
@@ -26,11 +27,11 @@ class BattleSimulator {
         this._armies.set(newArmyID, newArmy);
         this._armiesCache.push(newArmy);
         newArmy.subscribeToEvent(ARMY_DEAD, ({deadArmy}) => {
-            console.log('ARMY DIED:', deadArmy._armyID);
+            Logger.logArmy(deadArmy, 'died!');
             this._armiesCache = this._armiesCache.filter(army => army.getArmyID() != deadArmy._armyID);
             this._armies.delete(deadArmy._armyID);
             if (this._armiesCache.length <= 1){
-                console.log('BATTLE FINISHED');
+                Logger.logArmy(this._armiesCache[0], 'won the battle!');
                 this._battleOver = true;
             }
         });
@@ -81,13 +82,16 @@ class BattleSimulator {
                             let damage = attackingSquad.computeDamage();
                             let previousSquadDamage = squadCasualties.get(targetSquad.getSquadID()) || 0.0;
                             squadCasualties.set(targetSquad.getSquadID(), previousSquadDamage + damage);
+                            attackingSquad.increaseExperience();
+                            Logger.logSquad(attackingSquad, `attacked enemy squad, dealth ${damage} damage`);
+                        }
+                        else {
+                            Logger.logSquad(attackingSquad, `missed the enemy squad!`);
                         }
                     break;
                 }
             });
         });
-
-        //console.log('DAMAGE TAKEN IN THIS TURN:', squadCasualties);
 
         // apply damage to each squad
         this._armies.forEach((damagedArmy) => {
@@ -96,6 +100,7 @@ class BattleSimulator {
                 if (!damageTakenBySquad)
                     return;
                 damagedSquad.takeDamage(damageTakenBySquad);
+                Logger.logSquad(damagedSquad, `lost, taken ${damageTakenBySquad} damage.`);
             });
         });
     }

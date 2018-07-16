@@ -1,4 +1,5 @@
 const EventEmmiter = require('events');
+const Logger = require('./logger');
 const Squad = require('./squad');
 const { SQUAD_DEAD, ARMY_DEAD } = require('./battle-events');
 
@@ -20,8 +21,9 @@ class Army {
         const newSquadID = newSquad._squadID;
         this._squads.set(newSquadID, newSquad);
         this._squadsCache.push(newSquad);
+        newSquad._armyID = this._armyID;
         newSquad.subscribeToEvent(SQUAD_DEAD, ({deadSquad}) => {
-            console.log('SQUAD DEAD:', deadSquad._squadID);
+            Logger.logSquad(deadSquad, 'died!');
             this._squadsCache = this._squadsCache.filter(squad => squad.getSquadID() != deadSquad._squadID);
             this._squads.delete(deadSquad._squadID);
             if (this._squadsCache.length == 0)

@@ -32,6 +32,11 @@ class Soldier extends Unit {
             this._eventEmmiter.emit(UNIT_DEAD, {deadUnit: this});            
         }
     }
+
+    increaseExperience(){
+        if (this._experience < 50)
+            this._experience++;
+    }
 }
 
 module.exports = Soldier;

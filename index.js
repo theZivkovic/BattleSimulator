@@ -5,6 +5,7 @@ const Army = require('./army');
 const Squad = require('./squad');
 const BattleSimulator = require('./battle-simulator');
 const StrategyChoices = require('./strategyChoices');
+const Logger = require('./logger');
 let bs = new BattleSimulator();
 
 const redArmy = bs.addArmy(new Army(StrategyChoices.RANDOM));
@@ -25,4 +26,5 @@ const blueInfrantry = bs.addSquadToArmy(blueArmy, new Squad(StrategyChoices.RAND
 bs.addUnitToSquad(blueInfrantry, new Soldier(100, 200, 0));
 bs.addUnitToSquad(blueInfrantry, new Soldier(100, 200, 0));
 bs.simulate();
+
 

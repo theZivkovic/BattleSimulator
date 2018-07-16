@@ -24,6 +24,10 @@ class Unit {
         throw new Error(`You have to implement method ${this.takeDamage.name} in all subclasses of Unit class`);
     }
 
+    increaseExperience(){
+        throw new Error(`You have to implement method ${this.increaseExperience.name} in all subclasses of Unit class`);
+    }
+
     subscribeToEvent(eventName, listener){
         this._eventEmmiter.on(eventName, listener);
     }

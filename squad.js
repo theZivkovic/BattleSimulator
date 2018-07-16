@@ -1,6 +1,7 @@
 const strategyChoices = require('./strategyChoices');
 const EventEmmiter = require('events');
 const { UNIT_DEAD, SQUAD_DEAD } = require('./battle-events');
+const Logger = require('./logger');
 
 class Squad {
 
@@ -18,10 +19,18 @@ class Squad {
         return this._strategy;
     }
 
+    increaseExperience(){
+        this._units.forEach(unit => {
+            unit.increaseExperience();
+        });
+    }
+
     addUnit(someUnit){
         this._units.push(someUnit);
+        someUnit._squadID = this._squadID;
+        someUnit._armyID = this._armyID;
         someUnit.subscribeToEvent(UNIT_DEAD, ({deadUnit}) => {
-            console.log('Unit died:', deadUnit._unitID);
+            Logger.logUnit(deadUnit, 'died!');
             this._units = this._units.filter(unit => unit._unitID != deadUnit._unitID);
             if (this._units.length == 0)
                 this._eventEmmiter.emit(SQUAD_DEAD, {deadSquad: this});
