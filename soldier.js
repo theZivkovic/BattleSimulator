@@ -5,8 +5,8 @@ const { UNIT_DEAD } = require('./battle-events');
 
 class Soldier extends Unit {
 
-    constructor(unitID, health, rechargeTime, experience){
-        super(unitID, health, rechargeTime);
+    constructor(health, rechargeTime, experience){
+        super(health, rechargeTime);
         this._experience = experience;
     }
 
@@ -29,7 +29,7 @@ class Soldier extends Unit {
         this._health -= damage;
         if (!this.isActive()) {
             // check if the soldier is dead and signal it to the higher instances
-            this._eventEmmiter.emit(UNIT_DEAD, {});            
+            this._eventEmmiter.emit(UNIT_DEAD, {deadUnit: this});            
         }
     }
 }

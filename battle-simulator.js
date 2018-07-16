@@ -1,5 +1,6 @@
 const Army = require('./army');
 const StrategyChoices = require('./strategyChoices');
+const Vehicle = require('./vehicle');
 const { ARMY_DEAD } = require('./battle-events');
 
 class BattleSimulator {
@@ -8,6 +9,9 @@ class BattleSimulator {
         this._armies = new Map();
         this._armiesCache = new Array();
         this._battleOver = false;
+        this._nextArmyID = 0;
+        this._nextSquadID = 0;
+        this._nextUnitID = 0;
     }
 
     _getRandomDeffender(attackerArmyID){
@@ -16,30 +20,43 @@ class BattleSimulator {
         return filteredArmies[randomIndex];
     }
 
-    addArmy(armyID, strategy) {
-        const newArmy = new Army(armyID, strategy);
-        this._armies.set(armyID, newArmy);
+    addArmy(newArmy) {
+        const newArmyID = this._nextArmyID++;
+        newArmy._armyID = newArmyID;
+        this._armies.set(newArmyID, newArmy);
         this._armiesCache.push(newArmy);
-        newArmy.subscribeToEvent(ARMY_DEAD, () => {
-            console.log('ARMY DIED:', armyID);
-            this._armiesCache = this._armiesCache.filter(army => army.getArmyID() != armyID);
-            this._armies.delete(armyID);
+        newArmy.subscribeToEvent(ARMY_DEAD, ({deadArmy}) => {
+            console.log('ARMY DIED:', deadArmy._armyID);
+            this._armiesCache = this._armiesCache.filter(army => army.getArmyID() != deadArmy._armyID);
+            this._armies.delete(deadArmy._armyID);
             if (this._armiesCache.length <= 1){
                 console.log('BATTLE FINISHED');
                 this._battleOver = true;
             }
         });
+        return newArmy;
     }
 
-    addSquadToArmy(armyID, squadID) {
-        let targetArmy = this._armies.get(armyID);
-        targetArmy.addSquad(squadID, targetArmy.getStrategy());
+    addSquadToArmy(targetArmy, newSquad){
+        const newSquadID = this._nextSquadID++;
+        newSquad._squadID = newSquadID;
+        return targetArmy.addSquad(newSquad);
     }
 
-    addUnitToSquad(armyID, squadID, someUnit){
-        let targetArmy = this._armies.get(armyID);
-        let targetSquad = targetArmy.getSquad(squadID);
-        targetSquad.addUnit(someUnit);
+    addUnitToSquad(targetSquad, newUnit){
+        const newUnitID = this._nextUnitID++;
+        newUnit._unitID = newUnitID;
+        return targetSquad.addUnit(newUnit);
+    }
+
+    addSoldierToVehicle(targetVehicle, newSoldier){
+        if (!targetVehicle instanceof Vehicle)
+            throw `BattleSimulator:addUnitToVehicle: targetVehicle must be of type Vehicle`;
+
+        const newUnitID = this._nextUnitID;
+        newSoldier._unitID = newUnitID;
+        targetVehicle.addSoldier(newSoldier);
+        
     }
 
     _simulateOneTurn() {
@@ -70,7 +87,7 @@ class BattleSimulator {
             });
         });
 
-        console.log('DAMAGE TAKEN IN THIS TURN:', squadCasualties);
+        //console.log('DAMAGE TAKEN IN THIS TURN:', squadCasualties);
 
         // apply damage to each squad
         this._armies.forEach((damagedArmy) => {

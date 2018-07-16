@@ -4,11 +4,11 @@ const { SQUAD_DEAD, ARMY_DEAD } = require('./battle-events');
 
 class Army {
 
-    constructor(armyID, strategy) {
-        this._armyID = armyID;
+    constructor(strategy) {
         this._strategy = strategy;
         this._squads = new Map();
         this._squadsCache = new Array();
+        this._nextSquadID = 0;
         this._eventEmmiter = new EventEmmiter();
     }
 
@@ -16,17 +16,18 @@ class Army {
         return this._armyID;
     }
 
-    addSquad(squadID){
-        const newSquad = new Squad(squadID, this._strategy);
-        this._squads.set(squadID, newSquad);
+    addSquad(newSquad){
+        const newSquadID = newSquad._squadID;
+        this._squads.set(newSquadID, newSquad);
         this._squadsCache.push(newSquad);
-        newSquad.subscribeToEvent(SQUAD_DEAD, () => {
-            console.log('SQUAD DEAD:', newSquad.getSquadID());
-            this._squadsCache = this._squadsCache.filter(squad => squad.getSquadID() != squadID);
-            this._squads.delete(squadID);
+        newSquad.subscribeToEvent(SQUAD_DEAD, ({deadSquad}) => {
+            console.log('SQUAD DEAD:', deadSquad._squadID);
+            this._squadsCache = this._squadsCache.filter(squad => squad.getSquadID() != deadSquad._squadID);
+            this._squads.delete(deadSquad._squadID);
             if (this._squadsCache.length == 0)
-                this._eventEmmiter.emit(ARMY_DEAD, {});
+                this._eventEmmiter.emit(ARMY_DEAD, {deadArmy: this});
         });
+        return newSquad;
     }
 
     getSquad(squadID){

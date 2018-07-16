@@ -2,15 +2,10 @@ const EventEmmiter = require('events');
 
 class Unit {
 
-    constructor(unitID, health, rechargeTime){
-        this._unitID = unitID;
+    constructor(health, rechargeTime){
         this._health = health;
         this._rechargeTIme = rechargeTime;
         this._eventEmmiter = new EventEmmiter();
-    }
-
-    getUnitID(){
-        return this._unitID;
     }
 
     computeAttackProb() {

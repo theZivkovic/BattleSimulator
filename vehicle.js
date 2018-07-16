@@ -4,9 +4,9 @@ const { UNIT_DEAD } = require('./battle-events');
 
 class Vehicle extends Unit {
 
-    constructor(unitID, health, rechargeTime) {
+    constructor(health, rechargeTime) {
         // TO-DO - add constraint for recharge (>1000ms)
-        super(unitID, health, rechargeTime);
+        super(health, rechargeTime);
         this._soldiers = new Array();
     }
 
@@ -42,7 +42,7 @@ class Vehicle extends Unit {
         
         if (this._soldiers.length > 0){
 
-            let randomIndex = Math.random() * this._soldiers.length;
+            let randomIndex = Math.floor(Math.random() * this._soldiers.length);
             let randomSoldier = this._soldiers[randomIndex];
             randomSoldier.takeDamage( damage * Constants.MAIN_SOLDIER_DAMAGE_INTAKE );
 
@@ -58,7 +58,7 @@ class Vehicle extends Unit {
 
         if (this._totalHealth() <= 0) {
             // check if the vehicle is dead and signal to higher instances
-            this._eventEmmiter.emit(UNIT_DEAD, {});
+            this._eventEmmiter.emit(UNIT_DEAD, {deadUnit: this});
         }
     }
 }
