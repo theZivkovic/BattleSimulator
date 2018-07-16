@@ -1,6 +1,6 @@
 const strategyChoices = require('./strategyChoices');
 const EventEmmiter = require('events');
-const { UNIT_DEAD, UNIT_RECHARGED, SQUAD_DEAD } = require('./battle-events');
+const { UNIT_DEAD, UNIT_RECHARGED, SQUAD_DEAD, SQUAD_RECHARGED } = require('./battle-events');
 const { Logger } = require('./logger');
 
 class Squad {
@@ -12,6 +12,10 @@ class Squad {
         // holds the IDs of the currently fully recharged units
         this._rechargedUnitsMap = new Map();
         this._eventEmmiter = new EventEmmiter();
+    }
+
+    tellImReadyForTheAttack(){
+        this._eventEmmiter.emit(SQUAD_RECHARGED, {rechargedSquad: this});
     }
 
     getSquadID(){
@@ -48,6 +52,8 @@ class Squad {
         someUnit.subscribeToEvent(UNIT_RECHARGED, ({rechargedUnit}) => {
             Logger.logUnit(rechargedUnit, 'recharged and ready for battle');
             this._rechargedUnitsMap.set(rechargedUnit._unitID, true);
+            if (this.isRechargedForTheAttack())
+                this._eventEmmiter.emit(SQUAD_RECHARGED, {rechargedSquad: this});
         });
 
         this._rechargedUnitsMap.set(someUnit._unitID, true);

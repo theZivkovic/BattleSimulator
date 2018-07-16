@@ -21,7 +21,6 @@ class Army {
         const newSquadID = newSquad._squadID;
         this._squads.set(newSquadID, newSquad);
         this._squadsCache.push(newSquad);
-        newSquad._armyID = this._armyID;
         newSquad.subscribeToEvent(SQUAD_DEAD, ({deadSquad}) => {
             Logger.logSquad(deadSquad, 'died!');
             this._squadsCache = this._squadsCache.filter(squad => squad.getSquadID() != deadSquad._squadID);

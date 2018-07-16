@@ -2,7 +2,7 @@ const { Logger } = require('./logger');
 const Army = require('./army');
 const StrategyChoices = require('./strategyChoices');
 const Vehicle = require('./vehicle');
-const { ARMY_DEAD } = require('./battle-events');
+const { ARMY_DEAD, SQUAD_RECHARGED } = require('./battle-events');
 
 class BattleSimulator {
 
@@ -42,6 +42,10 @@ class BattleSimulator {
     addSquadToArmy(targetArmy, newSquad){
         const newSquadID = this._nextSquadID++;
         newSquad._squadID = newSquadID;
+        newSquad._armyID = targetArmy._armyID;
+        newSquad.subscribeToEvent(SQUAD_RECHARGED, ({rechargedSquad}) => {
+            this.attackWithSquad(rechargedSquad);
+        });
         return targetArmy.addSquad(newSquad);
     }
 
@@ -59,6 +63,32 @@ class BattleSimulator {
         newSoldier._unitID = newUnitID;
         targetVehicle.addSoldier(newSoldier);
         
+    }
+
+    attackWithSquad(attackingSquad){
+       
+        Logger.logSquad(attackingSquad, 'ready for attack!');
+        switch(attackingSquad.getStrategy()){
+
+            case StrategyChoices.RANDOM: 
+                const targetArmy = this._getRandomDeffender(attackingSquad._armyID);
+                const targetSquad = targetArmy.getRandomSquad();
+                
+                let attackerWinProb = attackingSquad.computeAttackProb();
+                let defenderWinProb = targetSquad.computeAttackProb();
+
+                if (attackerWinProb > defenderWinProb){
+                    let damage = attackingSquad.computeDamage();
+                    targetSquad.takeDamage(damage);
+                    attackingSquad.restartRechargeTimers();
+                    attackingSquad.increaseExperience();
+                    Logger.logSquad(attackingSquad, `attacked enemy squad, dealth ${damage} damage`);
+                }
+                else {
+                    Logger.logSquad(attackingSquad, `missed the enemy squad!`);
+                }
+            break;
+        }
     }
 
     _simulateOneTurn() {
@@ -120,8 +150,11 @@ class BattleSimulator {
     }
 
     simulate() {
-        //while(!this._battleOver)
-            this._simulateOneTurn();
+        this._armiesCache.forEach((army) => {
+            army.forEachSquad((squad) => {
+                squad.tellImReadyForTheAttack();
+            });
+        });
     }
 }
 
