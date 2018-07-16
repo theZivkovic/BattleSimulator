@@ -8,6 +8,8 @@ class Squad {
     constructor(strategy){
         this._strategy = strategy;
         this._units = new Array();
+
+        // holds the IDs of the currently fully recharged units
         this._rechargedUnitsMap = new Map();
         this._eventEmmiter = new EventEmmiter();
     }
@@ -44,7 +46,7 @@ class Squad {
         });
 
         someUnit.subscribeToEvent(UNIT_RECHARGED, ({rechargedUnit}) => {
-            console.log('Unit recharged:', rechargedUnit._unitID);
+            Logger.logUnit(rechargedUnit, 'recharged and ready for battle');
             this._rechargedUnitsMap.set(rechargedUnit._unitID, true);
         });
 

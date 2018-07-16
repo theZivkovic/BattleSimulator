@@ -7,19 +7,12 @@ class Unit {
         this._health = health;
         this._rechargeTime = rechargeTime;
         this._eventEmmiter = new EventEmmiter();
-        this._recharged = true;
     }
 
     restartRechargeTimer(){
-        this._recharged = false;
         setTimeout(() => {
-            this._recharged = true;
             this._eventEmmiter.emit(UNIT_RECHARGED, {rechargedUnit: this});
         }, this._rechargeTime);
-    }
-
-    isRecharged(){
-        return this._recharged;
     }
 
     computeAttackProb() {

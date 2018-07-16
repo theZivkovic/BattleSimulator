@@ -63,6 +63,9 @@ class BattleSimulator {
 
     _simulateOneTurn() {
 
+        if (this._battleOver)
+            return;
+
         let squadCasualties = new Map();
 
         // calculate damage taken by each squad
@@ -112,10 +115,12 @@ class BattleSimulator {
                 Logger.logSquad(damagedSquad, `lost, taken ${damageTakenBySquad} damage.`);
             });
         });
+
+        setTimeout(this._simulateOneTurn.bind(this), 1);
     }
 
     simulate() {
-        while(!this._battleOver)
+        //while(!this._battleOver)
             this._simulateOneTurn();
     }
 }
