@@ -97,6 +97,9 @@ class BattleSimulator {
 
     attackWithSquad(attackingSquad){
        
+        if (this._battleOver)
+            return;
+            
         Logger.logSquad(attackingSquad, 'ready for attack!');
 
         let targetSquad = null;
@@ -128,7 +131,8 @@ class BattleSimulator {
             Logger.logSquad(attackingSquad, `attacked enemy squad, dealth ${damage} damage`);
         }
         else {
-            Logger.logSquad(attackingSquad, `missed the enemy squad!`);
+            Logger.logSquad(attackingSquad, `missed the enemy squad! ${attackerWinProb} < ${defenderWinProb}`);
+            attackingSquad.restartRechargeTimers();
         }
     }
 

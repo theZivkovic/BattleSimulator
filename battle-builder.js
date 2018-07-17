@@ -91,13 +91,10 @@ class BattleBuilder {
                 }
             }
         }
-       
     }
 
     async _generateBattleFromBlueprint() {
         
-        //this._blueprint = JSON.parse('{"armies":[{"strategy":"strongest","squads":[{"soldiers":5,"vehicles":[{"soldiers":3}]},{"soldiers":5,"vehicles":[{"soldiers":1},{"soldiers":1}]}]},{"strategy":"weakest","squads":[{"soldiers":5,"vehicles":[]},{"soldiers":5,"vehicles":[]}]}]}');
-                
         const newBattleSimulator = new BattleSimulator();
 
         this._blueprint.armies.forEach((armyBlueprint) => {
@@ -117,7 +114,6 @@ class BattleBuilder {
             });
         });
 
-        // console.log(util.inspect(newBattleSimulator, false, null));
         return newBattleSimulator;
     }
 }
