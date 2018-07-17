@@ -12,12 +12,17 @@ const util = require('util')
 class BattleBuilder {
 
     constructor() {
-        this._battleSimulator = new BattleSimulator();
-        this._blueprint = {};
     }
 
-    async initialize() {
+    async build() {
+        this._battleSimulator = null;
+        this._blueprint = {};
+        await this._generateBlueprintByQuestions();
+        return await this._generateBattleFromBlueprint();
+    }
 
+    async _generateBlueprintByQuestions() {
+        
         const noArmies = await askAQuestionUntilRight(
             'Number of armies:\n',
             answer => Number(answer) >= Constants.MIN_NUMBER_OF_ARMIES,
@@ -28,13 +33,27 @@ class BattleBuilder {
 
         for (let armyIndex = 0; armyIndex < noArmies; armyIndex++) {
             
+            const strategy = await askAQuestionUntilRight(
+                `Strategy for Army#${armyIndex}:\n1.${StrategyChoices.RANDOM}\n2.${StrategyChoices.WEAKEST}\n3.${StrategyChoices.STRONGEST}\n`,
+                answer => Number(answer) >= 1 && Number(answer) <= 3,
+                `Option out of bounds!`
+            );
+
+            this._blueprint.armies[armyIndex] = {};
+
+            switch(Number(strategy)){
+                case 1: this._blueprint.armies[armyIndex].strategy = StrategyChoices.RANDOM; break;
+                case 2: this._blueprint.armies[armyIndex].strategy = StrategyChoices.WEAKEST; break;
+                case 3: this._blueprint.armies[armyIndex].strategy = StrategyChoices.STRONGEST; break;
+            }
+
             const noSquads = await askAQuestionUntilRight(
                 `Number of squads for Army#${armyIndex}:\n`,
                 answer => Number(answer) >= Constants.MIN_NUMBER_OF_SQUADS_PER_ARMY,
                 `Wrong number of squads per army, should be >= ${Constants.MIN_NUMBER_OF_SQUADS_PER_ARMY}!`
             );
 
-            this._blueprint.armies[armyIndex] = { squads: Array(Number(noSquads)) };
+            this._blueprint.armies[armyIndex].squads = new Array(Number(noSquads));
 
             for (let squadIndex = 0; squadIndex < noSquads; squadIndex++){
 
@@ -44,7 +63,9 @@ class BattleBuilder {
                     answer => Number(answer) >= Constants.MIN_NUMBER_OF_UNITS_PER_SQUAD && Number(answer) <= Constants.MAX_NUMBER_OF_UNITS_PER_SQUAD,
                     'Number of soldiers out of range!');
 
-                this._blueprint.armies[armyIndex].squads[squadIndex] = { soldiers : noSoldiers };
+                this._blueprint.armies[armyIndex].squads[squadIndex] = {};
+
+                this._blueprint.armies[armyIndex].squads[squadIndex].soldiers = Number(noSoldiers);
 
                 if (noSoldiers == Constants.MAX_NUMBER_OF_UNITS_PER_SQUAD)
                     continue;
@@ -66,11 +87,38 @@ class BattleBuilder {
                         `Wrong number soldiers in this vehicle!`
                     );
 
-                    this._blueprint.armies[armyIndex].squads[squadIndex].vehicles[vehicleIndex] = { soldiers: noSoldiers };
+                    this._blueprint.armies[armyIndex].squads[squadIndex].vehicles[vehicleIndex] = { soldiers: Number(noSoldiers) };
                 }
             }
         }
-        console.log(util.inspect(this._blueprint, false, null))
+       
+    }
+
+    async _generateBattleFromBlueprint() {
+        
+        //this._blueprint = JSON.parse('{"armies":[{"strategy":"strongest","squads":[{"soldiers":5,"vehicles":[{"soldiers":3}]},{"soldiers":5,"vehicles":[{"soldiers":1},{"soldiers":1}]}]},{"strategy":"weakest","squads":[{"soldiers":5,"vehicles":[]},{"soldiers":5,"vehicles":[]}]}]}');
+                
+        const newBattleSimulator = new BattleSimulator();
+
+        this._blueprint.armies.forEach((armyBlueprint) => {
+            let newArmy = newBattleSimulator.addArmy(new Army());
+            let newArmyStrategy = armyBlueprint.strategy;
+            armyBlueprint.squads.forEach((squadBlueprint) => {
+                let newSquad = newBattleSimulator.addSquadToArmy(newArmy, new Squad(newArmyStrategy));
+                for (let soldierIndex = 0; soldierIndex < squadBlueprint.soldiers; soldierIndex++){
+                    newBattleSimulator.addUnitToSquad(newSquad, new Soldier(100, 100, 0));
+                }
+                for (let vehicleBlueprint of squadBlueprint.vehicles){
+                    let newVehicle = newBattleSimulator.addUnitToSquad(newSquad, new Vehicle(100, 1000));
+                    for (let operatorIndex = 0; operatorIndex < vehicleBlueprint.soldiers; operatorIndex++){
+                        newBattleSimulator.addSoldierToVehicle(newVehicle, new Soldier(100, 100, 0));
+                    }
+                }
+            });
+        });
+
+        // console.log(util.inspect(newBattleSimulator, false, null));
+        return newBattleSimulator;
     }
 }
 
