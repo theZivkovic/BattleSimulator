@@ -1,6 +1,7 @@
 const Unit = require('./unit');
 const Constants = require('./constants');
 const { UNIT_DEAD } = require('./battle-events');
+const { Logger } = require('./logger');
 
 class Vehicle extends Unit {
 
@@ -15,9 +16,9 @@ class Vehicle extends Unit {
         this._soldiers.push(someSoldier);
     }
 
-    _totalHealth() {
+    _totalSoldiersHP() {
         const totalSoldiersHP = this._soldiers.reduce((accum, currentSoldier) => accum + currentSoldier._health, 0.0);
-        return totalSoldiersHP / this._soldiers.length + this._health;
+        return totalSoldiersHP / this._soldiers.length;
     }
 
     computeAttackProb() {
@@ -39,7 +40,9 @@ class Vehicle extends Unit {
     takeDamage(damage){
         
         this._health -= damage * Constants.VEHICLE_DAMAGE_INTAKE;
-        
+
+        Logger.logUnit(this, `took damage of ${Constants.VEHICLE_DAMAGE_INTAKE} * ${damage.toFixed(2)} damage (the rest goes to soldier), has ${this._health.toFixed(2)} HPs left`);
+
         if (this._soldiers.length > 0){
 
             let randomIndex = Math.floor(Math.random() * this._soldiers.length);
@@ -56,7 +59,7 @@ class Vehicle extends Unit {
             });
         }
 
-        if (this._totalHealth() <= 0) {
+        if (this._totalSoldiersHP() <= 0 || this._health <= 0) {
             // check if the vehicle is dead and signal to higher instances
             this._eventEmmiter.emit(UNIT_DEAD, {deadUnit: this});
         }

@@ -75,6 +75,7 @@ class Squad {
 
     takeDamage(damage){
         let damagePerUnit = damage / this._units.length;
+        Logger.logSquad(this, `took ${damage.toFixed(2)} damage, ${damagePerUnit.toFixed(2)} per unit`);
         this._units.forEach((unit) => {
             unit.takeDamage(damagePerUnit);
         });

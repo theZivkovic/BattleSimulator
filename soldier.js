@@ -2,6 +2,7 @@ const Unit = require('./unit');
 const Constants = require('./constants');
 const { randomInRange } = require('./mathUtil');
 const { UNIT_DEAD } = require('./battle-events');
+const { Logger } = require('./logger');
 
 class Soldier extends Unit {
 
@@ -27,6 +28,7 @@ class Soldier extends Unit {
     takeDamage(damage){
 
         this._health -= damage;
+        Logger.logUnit(this, `took ${damage.toFixed(2)} damage, has ${this._health.toFixed(2)} HPs left`);
         if (!this.isActive()) {
             // check if the soldier is dead and signal it to the higher instances
             this._eventEmmiter.emit(UNIT_DEAD, {deadUnit: this});            

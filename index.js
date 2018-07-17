@@ -14,7 +14,7 @@ let bs = new BattleSimulator();
 const redArmy = bs.addArmy(new Army(StrategyChoices.RANDOM));
 const redInfrantry = bs.addSquadToArmy(redArmy, new Squad(StrategyChoices.RANDOM));
 bs.addUnitToSquad(redInfrantry, new Soldier(200, 200, 5));
- bs.addUnitToSquad(redInfrantry, new Soldier(200, 120, 5));
+bs.addUnitToSquad(redInfrantry, new Soldier(200, 120, 5));
 // bs.addUnitToSquad(redInfrantry, new Soldier(100, 200, 5));
 // bs.addUnitToSquad(redInfrantry, new Soldier(100, 200, 5));
 // bs.addUnitToSquad(redInfrantry, new Soldier(100, 200, 5));
@@ -27,6 +27,11 @@ const blueArmy = bs.addArmy(new Army(StrategyChoices.RANDOM));
 const blueInfrantry = bs.addSquadToArmy(blueArmy, new Squad(StrategyChoices.RANDOM));
 bs.addUnitToSquad(blueInfrantry, new Soldier(100, 200, 0));
 bs.addUnitToSquad(blueInfrantry, new Soldier(100, 200, 0));
+const blueVehicle = bs.addUnitToSquad(blueInfrantry, new Vehicle(100, 1000));
+
+bs.addSoldierToVehicle(blueVehicle, new Soldier(100, 200, 0));
+
+
 bs.simulate();
 
 

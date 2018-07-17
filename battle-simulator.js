@@ -61,6 +61,8 @@ class BattleSimulator {
 
         const newUnitID = this._nextUnitID;
         newSoldier._unitID = newUnitID;
+        newSoldier._squadID = targetVehicle._squadID;
+        newSoldier._armyID = targetVehicle._armyID;
         targetVehicle.addSoldier(newSoldier);
         
     }
