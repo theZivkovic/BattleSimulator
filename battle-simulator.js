@@ -91,64 +91,6 @@ class BattleSimulator {
         }
     }
 
-    _simulateOneTurn() {
-
-        if (this._battleOver)
-            return;
-
-        let squadCasualties = new Map();
-
-        // calculate damage taken by each squad
-        this._armies.forEach((attackingArmy) => {
-
-            attackingArmy.forEachSquad((attackingSquad) => {
-                
-                let canAttack = attackingSquad.isRechargedForTheAttack();
-                
-                if (!canAttack){
-                    Logger.logSquad(attackingSquad, 'not ready for the attack, still recharging');
-                    return;
-                }
-
-                switch(attackingSquad.getStrategy()){
-
-                    case StrategyChoices.RANDOM: 
-                        const targetArmy = this._getRandomDeffender(attackingArmy.getArmyID());
-                        const targetSquad = targetArmy.getRandomSquad();
-                        
-                        let attackerWinProb = attackingSquad.computeAttackProb();
-                        let defenderWinProb = targetSquad.computeAttackProb();
-
-                        if (attackerWinProb > defenderWinProb){
-                            let damage = attackingSquad.computeDamage();
-                            let previousSquadDamage = squadCasualties.get(targetSquad.getSquadID()) || 0.0;
-                            squadCasualties.set(targetSquad.getSquadID(), previousSquadDamage + damage);
-                            attackingSquad.restartRechargeTimers();
-                            attackingSquad.increaseExperience();
-                            Logger.logSquad(attackingSquad, `attacked enemy squad, dealth ${damage} damage`);
-                        }
-                        else {
-                            Logger.logSquad(attackingSquad, `missed the enemy squad!`);
-                        }
-                    break;
-                }
-            });
-        });
-
-        // apply damage to each squad
-        this._armies.forEach((damagedArmy) => {
-            damagedArmy.forEachSquad((damagedSquad) => {
-                let damageTakenBySquad = squadCasualties.get(damagedSquad.getSquadID());
-                if (!damageTakenBySquad)
-                    return;
-                damagedSquad.takeDamage(damageTakenBySquad);
-                Logger.logSquad(damagedSquad, `lost, taken ${damageTakenBySquad} damage.`);
-            });
-        });
-
-        setTimeout(this._simulateOneTurn.bind(this), 1);
-    }
-
     simulate() {
         this._armiesCache.forEach((army) => {
             army.forEachSquad((squad) => {
