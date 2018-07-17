@@ -6,32 +6,28 @@ const Squad = require('./squad');
 const BattleSimulator = require('./battle-simulator');
 const StrategyChoices = require('./strategyChoices');
 
+const BattleBuilder = require('./battle-builder');
+
 const { Logger, LoggerOutput } = require('./logger');
 Logger.initialize(LoggerOutput.TO_CONSOLE);
 
-let bs = new BattleSimulator();
+// let bs = new BattleSimulator();
 
-const redArmy = bs.addArmy(new Army(StrategyChoices.WEAKEST));
-const redInfrantry = bs.addSquadToArmy(redArmy, new Squad(StrategyChoices.WEAKEST));
-bs.addUnitToSquad(redInfrantry, new Soldier(200, 200, 5));
-bs.addUnitToSquad(redInfrantry, new Soldier(200, 120, 5));
-// bs.addUnitToSquad(redInfrantry, new Soldier(100, 200, 5));
-// bs.addUnitToSquad(redInfrantry, new Soldier(100, 200, 5));
-// bs.addUnitToSquad(redInfrantry, new Soldier(100, 200, 5));
-// bs.addUnitToSquad(redInfrantry, new Soldier(100, 200, 5));
-// const vehicle = bs.addUnitToSquad(redInfrantry, new Vehicle(100, 1500));
-// bs.addSoldierToVehicle(vehicle, new Soldier(100, 200, 10));
-// bs.addSoldierToVehicle(vehicle, new Soldier(100, 200, 11));
+// const redArmy = bs.addArmy(new Army());
+// const redInfrantry = bs.addSquadToArmy(redArmy, new Squad(StrategyChoices.WEAKEST));
+// bs.addUnitToSquad(redInfrantry, new Soldier(200, 200, 5));
+// bs.addUnitToSquad(redInfrantry, new Soldier(200, 120, 5));
 
-const blueArmy = bs.addArmy(new Army(StrategyChoices.RANDOM));
-const blueInfrantry = bs.addSquadToArmy(blueArmy, new Squad(StrategyChoices.RANDOM));
-bs.addUnitToSquad(blueInfrantry, new Soldier(100, 200, 0));
-bs.addUnitToSquad(blueInfrantry, new Soldier(100, 200, 0));
-const blueVehicle = bs.addUnitToSquad(blueInfrantry, new Vehicle(100, 1000));
+// const blueArmy = bs.addArmy(new Army(StrategyChoices.RANDOM));
+// const blueInfrantry = bs.addSquadToArmy(blueArmy, new Squad(StrategyChoices.RANDOM));
+// bs.addUnitToSquad(blueInfrantry, new Soldier(100, 200, 0));
+// bs.addUnitToSquad(blueInfrantry, new Soldier(100, 200, 0));
+// const blueVehicle = bs.addUnitToSquad(blueInfrantry, new Vehicle(100, 1000));
+// bs.addSoldierToVehicle(blueVehicle, new Soldier(100, 200, 0));
 
-bs.addSoldierToVehicle(blueVehicle, new Soldier(100, 200, 0));
+// bs.simulate();
 
-
-bs.simulate();
+let battleBuilder = new BattleBuilder();
+battleBuilder.initialize();
 
 

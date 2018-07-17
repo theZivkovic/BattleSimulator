@@ -5,7 +5,7 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-const questionHelper = (questionText) => {
+const askAQuestion = (questionText) => {
     return new Promise((resolve, reject) => {
         rl.question(questionText, (answer) => {
             resolve(answer);
@@ -13,4 +13,16 @@ const questionHelper = (questionText) => {
     });
 }
 
-module.exports = questionHelper;
+
+
+const askAQuestionUntilRight = async (questionText, successChecker, errorMessage) => {
+    let answer = await askAQuestion(questionText);
+    if (!successChecker(answer)){
+        console.log(errorMessage);
+        return await askAQuestionUntilRight(questionText, successChecker, errorMessage);
+    }
+    else return answer;
+}
+
+module.exports.askAQuestion = askAQuestion;
+module.exports.askAQuestionUntilRight = askAQuestionUntilRight;

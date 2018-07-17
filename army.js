@@ -5,8 +5,7 @@ const { SQUAD_DEAD, ARMY_DEAD } = require('./battle-events');
 
 class Army {
 
-    constructor(strategy) {
-        this._strategy = strategy;
+    constructor() {
         this._squads = new Map();
         this._squadsCache = new Array();
         this._nextSquadID = 0;
@@ -90,10 +89,6 @@ class Army {
 
     getArmyID() {
         return this._armyID;
-    }
-
-    getStrategy(){
-        return this._strategy;
     }
 
     subscribeToEvent(eventName, listener){
