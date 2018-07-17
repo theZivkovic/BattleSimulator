@@ -50,11 +50,11 @@ class Logger {
     }
 
     static logSquad(squad, didWhat){
-        Logger._log(`ARMY#${squad._armyID}::SQUAD#${squad._squadID}: ${didWhat}`);
+        Logger._log(`ARMY#${squad._armyID}::SQUAD#${squad._squadID}::${didWhat}`);
     }
 
     static logArmy(army, didWhat){
-        Logger._log(`ARMY#${army._armyID}: ${didWhat}`);
+        Logger._log(`ARMY#${army._armyID}::${didWhat}`);
     }
 
     static logBattle(message){

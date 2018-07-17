@@ -21,6 +21,19 @@ class Vehicle extends Unit {
         return totalSoldiersHP / this._soldiers.length;
     }
 
+    totalHealth(){
+        return this._totalSoldiersHP() + this._health;
+    }
+
+    experiencePerUnit() {
+        let totalExperience = this._soldiers.reduce((accum, currentSoldier) => accum + currentSoldier._experience, 0.0);
+        return totalExperience / this._soldiers.length;
+    }
+
+    totalNumberOfRelatedUnits(){
+        return this._soldiers.length + 1;
+    }
+
     computeAttackProb() {
         const attackProbsProduct = this._soldiers.reduce((accum, curSoldier) => accum * curSoldier.computeAttackProb(), 1.0);
         const attackProbsGeomAvg =  Math.pow(attackProbsProduct, 1.0 / this._soldiers.length);

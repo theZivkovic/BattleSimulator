@@ -15,6 +15,18 @@ class Unit {
         }, this._rechargeTime);
     }
 
+    totalHealth(){
+        throw new Error(`You have to implement method ${this.totalHealth.name} in all subclasses of Unit class`);
+    }
+
+    experiencePerUnit() {
+        throw new Error(`You have to implement method ${this.experiencePerUnit.name} in all subclasses of Unit class`);
+    }
+
+    totalNumberOfRelatedUnits(){
+        throw new Error(`You have to implement method ${this.totalNumberOfRelatedUnits.name} in all subclasses of Unit class`);
+    }
+
     computeAttackProb() {
         throw new Error(`You have to implement method ${this.computeAttackProb.name} in all subclasses of Unit class`);
     }

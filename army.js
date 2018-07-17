@@ -39,6 +39,50 @@ class Army {
         let randomIndex = Math.floor(Math.random() * this._squadsCache.length);
         return this._squadsCache[randomIndex];
     }
+    
+    getStrongestSquad(attackedArmyID) {
+
+        let strongestEnemySquad = null;
+
+        for (let currentSquad of this._squadsCache){
+
+            if (currentSquad._armyID != attackedArmyID && !strongestEnemySquad){
+                strongestEnemySquad = currentSquad;
+                continue;
+            }
+
+            if (!strongestEnemySquad)
+                continue;
+            
+            strongestEnemySquad = currentSquad.computeSquadStrength() > strongestEnemySquad.computeSquadStrength() ?
+                currentSquad : strongestEnemySquad;
+        }
+
+        return strongestEnemySquad;
+    }
+
+    getWeakestSquad(attackedArmyID){
+
+        let weakestEnemySquad = null;
+
+        for (let currentSquad of this._squadsCache){
+
+            if (currentSquad._armyID != attackedArmyID && !weakestEnemySquad){
+                weakestEnemySquad = currentSquad;
+                continue;
+            }
+
+            if (!weakestEnemySquad)
+                continue;
+            
+            weakestEnemySquad = currentSquad.computeSquadStrength() < weakestEnemySquad.computeSquadStrength() ?
+                currentSquad : weakestEnemySquad;
+        }
+
+        return weakestEnemySquad;
+    }
+
+    
 
     forEachSquad(callback){
         this._squads.forEach(callback);

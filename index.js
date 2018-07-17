@@ -11,8 +11,8 @@ Logger.initialize(LoggerOutput.TO_CONSOLE);
 
 let bs = new BattleSimulator();
 
-const redArmy = bs.addArmy(new Army(StrategyChoices.RANDOM));
-const redInfrantry = bs.addSquadToArmy(redArmy, new Squad(StrategyChoices.RANDOM));
+const redArmy = bs.addArmy(new Army(StrategyChoices.WEAKEST));
+const redInfrantry = bs.addSquadToArmy(redArmy, new Squad(StrategyChoices.WEAKEST));
 bs.addUnitToSquad(redInfrantry, new Soldier(200, 200, 5));
 bs.addUnitToSquad(redInfrantry, new Soldier(200, 120, 5));
 // bs.addUnitToSquad(redInfrantry, new Soldier(100, 200, 5));

@@ -69,6 +69,15 @@ class Squad {
         return this._units.reduce((accum, curUnit) => accum + curUnit.computeDamage(), 0.0);
     }
 
+    computeSquadStrength(){
+        let totalHealth = this._units.reduce((accum, curUnit) => accum + curUnit.totalHealth(), 0.0);
+        let experiencePerUnit = this._units.reduce((accum, curUnit) => accum + curUnit.experiencePerUnit(), 0.0) / this._units.length;
+        let numberOfUnits = this._units.reduce((accum, curUnit) => accum + curUnit.totalNumberOfRelatedUnits(), 0.0);
+        let totalDamage = this._units.reduce((accum, curUnit) => accum + curUnit.computeDamage(), 0.0);
+        return totalHealth * experiencePerUnit * numberOfUnits * totalDamage;
+
+    }
+
     isActive(){
         return this._units.some(unit => unit.isActive());
     }

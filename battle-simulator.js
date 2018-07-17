@@ -21,6 +21,34 @@ class BattleSimulator {
         return filteredArmies[randomIndex];
     }
 
+    _getStrongestDeffender(attackerArmyID){
+        return this._armiesCache.reduce((lastStrongestSquad, currentArmy) => {
+            if (currentArmy._armyID != attackerArmyID && !lastStrongestSquad)
+                return currentArmy.getStrongestSquad();
+            
+            if (!lastStrongestSquad)
+                return null;
+
+            let currentStrongestSquad = currentArmy.getStrongestSquad();
+            return currentStrongestSquad.computeSquadStrength() > lastStrongestSquad.computeSquadStrength() ?
+                currentStrongestSquad : lastStrongestSquad; 
+        }, null);
+    }
+
+    _getWeakestDeffender(attackerArmyID){
+        return this._armiesCache.reduce((lastWeakestSquad, currentArmy) => {
+            if (currentArmy._armyID != attackerArmyID && !lastWeakestSquad)
+                return currentArmy.getWeakestSquad();
+            
+            if (!lastWeakestSquad)
+                return null;
+
+            let currentWeakestSquad = currentArmy.getWeakestSquad();
+            return currentWeakestSquad.computeSquadStrength() < lastWeakestSquad.computeSquadStrength() ?
+                currentWeakestSquad : lastWeakestSquad; 
+        }, null);
+    }
+
     addArmy(newArmy) {
         const newArmyID = this._nextArmyID++;
         newArmy._armyID = newArmyID;
@@ -70,26 +98,37 @@ class BattleSimulator {
     attackWithSquad(attackingSquad){
        
         Logger.logSquad(attackingSquad, 'ready for attack!');
-        switch(attackingSquad.getStrategy()){
 
+        let targetSquad = null;
+
+        switch(attackingSquad.getStrategy()){
+            
             case StrategyChoices.RANDOM: 
                 const targetArmy = this._getRandomDeffender(attackingSquad._armyID);
-                const targetSquad = targetArmy.getRandomSquad();
-                
-                let attackerWinProb = attackingSquad.computeAttackProb();
-                let defenderWinProb = targetSquad.computeAttackProb();
+                targetSquad = targetArmy.getRandomSquad();
+                break;
+            
+            case StrategyChoices.STRONGEST:
+                targetSquad = this._getStrongestDeffender(attackingSquad._armyID);
+                break;
+            
+            case StrategyChoices.WEAKEST:
+                targetSquad = this._getWeakestDeffender(attackingSquad._armyID);
+                break;
+        }
 
-                if (attackerWinProb > defenderWinProb){
-                    let damage = attackingSquad.computeDamage();
-                    targetSquad.takeDamage(damage);
-                    attackingSquad.restartRechargeTimers();
-                    attackingSquad.increaseExperience();
-                    Logger.logSquad(attackingSquad, `attacked enemy squad, dealth ${damage} damage`);
-                }
-                else {
-                    Logger.logSquad(attackingSquad, `missed the enemy squad!`);
-                }
-            break;
+        let attackerWinProb = attackingSquad.computeAttackProb();
+        let defenderWinProb = targetSquad.computeAttackProb();
+
+        if (attackerWinProb > defenderWinProb){
+            let damage = attackingSquad.computeDamage();
+            targetSquad.takeDamage(damage);
+            attackingSquad.restartRechargeTimers();
+            attackingSquad.increaseExperience();
+            Logger.logSquad(attackingSquad, `attacked enemy squad, dealth ${damage} damage`);
+        }
+        else {
+            Logger.logSquad(attackingSquad, `missed the enemy squad!`);
         }
     }
 

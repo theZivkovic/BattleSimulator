@@ -11,6 +11,18 @@ class Soldier extends Unit {
         this._experience = experience;
     }
 
+    totalHealth(){
+        return this._health;
+    }
+
+    experiencePerUnit() {
+        return this._experience;
+    }
+
+    totalNumberOfRelatedUnits(){
+        return 1;
+    }
+
     computeAttackProb() {
         const healthPart = Constants.SOLDIER_ATTACK_PONDER * (1.0 + this._health / Constants.SOLDIER_HEALTH_NORMALIZER);
         const expPart = randomInRange(Constants.SOLIDER_ATTACK_MIN_EXP_GAIN + this._experience, Constants.SOLDIER_ATTACK_MAX_EXP_GAIN) / Constants.SOLDIER_EXP_NORMALIZER;
