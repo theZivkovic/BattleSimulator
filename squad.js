@@ -61,7 +61,7 @@ class Squad {
     }
 
     computeAttackProb(){
-        const attackProbsProduct = this._units.reduce((accum, curUnit) => accum + curUnit.computeAttackProb(), 1.0);
+        const attackProbsProduct = this._units.reduce((accum, curUnit) => accum * curUnit.computeAttackProb(), 1.0);
         return Math.pow(attackProbsProduct, 1.0 / this._units.length);
     }
 

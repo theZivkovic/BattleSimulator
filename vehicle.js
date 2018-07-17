@@ -21,7 +21,7 @@ class Vehicle extends Unit {
     }
 
     computeAttackProb() {
-        const attackProbsProduct = this._soldiers.reduce((accum, curSoldier) => accum + curSoldier.computeAttackProb(), 1.0);
+        const attackProbsProduct = this._soldiers.reduce((accum, curSoldier) => accum * curSoldier.computeAttackProb(), 1.0);
         const attackProbsGeomAvg =  Math.pow(attackProbsProduct, 1.0 / this._soldiers.length);
         return Constants.VEHICLE_ATTACK_PONDER * (1.0 + this._health / Constants.VEHICLE_HEALTH_NORMALIZER) * attackProbsGeomAvg; 
     }
