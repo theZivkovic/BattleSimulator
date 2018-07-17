@@ -60,6 +60,7 @@ class BattleSimulator {
             this._armies.delete(deadArmy._armyID);
             if (this._armiesCache.length <= 1){
                 Logger.logArmy(this._armiesCache[0], 'won the battle!');
+                Logger.logArmyStats(this._armiesCache[0]);
                 console.log('BATTLE OVER!');
                 this._battleOver = true;
             }
@@ -99,7 +100,7 @@ class BattleSimulator {
        
         if (this._battleOver)
             return;
-            
+
         Logger.logSquad(attackingSquad, 'ready for attack!');
 
         let targetSquad = null;
