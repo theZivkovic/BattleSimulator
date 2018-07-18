@@ -129,10 +129,10 @@ class BattleSimulator {
             targetSquad.takeDamage(damage);
             attackingSquad.restartRechargeTimers();
             attackingSquad.increaseExperience();
-            Logger.logSquad(attackingSquad, `attacked enemy squad, dealth ${damage} damage`);
+            Logger.logSquad(attackingSquad, `attacked enemy squad, dealth ${damage.toFixed(2)} damage`);
         }
         else {
-            Logger.logSquad(attackingSquad, `missed the enemy squad! ${attackerWinProb} < ${defenderWinProb}`);
+            Logger.logSquad(attackingSquad, `missed the enemy squad! ${attackerWinProb.toFixed(2)} < ${defenderWinProb.toFixed(2)}`);
             attackingSquad.restartRechargeTimers();
         }
     }

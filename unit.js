@@ -4,6 +4,13 @@ const { UNIT_RECHARGED } = require('./battle-events');
 class Unit {
 
     constructor(health, rechargeTime){
+
+        if (health < 0 || health > 100)
+            throw new Error('Unit::constructor: health must be in [0-100] interval');
+        
+        if (rechargeTime < 100 || rechargeTime > 2000)
+            throw new Error('Unit::constructor: rechargeTime must be in [100-2000] interval');
+
         this._health = health;
         this._rechargeTime = rechargeTime;
         this._eventEmmiter = new EventEmmiter();

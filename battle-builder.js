@@ -103,12 +103,12 @@ class BattleBuilder {
             armyBlueprint.squads.forEach((squadBlueprint) => {
                 let newSquad = newBattleSimulator.addSquadToArmy(newArmy, new Squad(newArmyStrategy));
                 for (let soldierIndex = 0; soldierIndex < squadBlueprint.soldiers; soldierIndex++){
-                    newBattleSimulator.addUnitToSquad(newSquad, new Soldier(100, 100, 0));
+                    newBattleSimulator.addUnitToSquad(newSquad, new Soldier(100, 200, 0));
                 }
                 for (let vehicleBlueprint of squadBlueprint.vehicles){
                     let newVehicle = newBattleSimulator.addUnitToSquad(newSquad, new Vehicle(100, 1000));
                     for (let operatorIndex = 0; operatorIndex < vehicleBlueprint.soldiers; operatorIndex++){
-                        newBattleSimulator.addSoldierToVehicle(newVehicle, new Soldier(100, 100, 0));
+                        newBattleSimulator.addSoldierToVehicle(newVehicle, new Soldier(100, 200, 0));
                     }
                 }
             });

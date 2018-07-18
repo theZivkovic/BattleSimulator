@@ -48,7 +48,7 @@ class Soldier extends Unit {
     }
 
     increaseExperience(){
-        if (this._experience < 50)
+        if (this._experience < Constants.MAX_EXPERIENCE_PER_SOLDIER)
             this._experience++;
     }
 }

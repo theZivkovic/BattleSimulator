@@ -11,13 +11,14 @@ const runTestCase = async () => {
     
     let army0 = battleSimulator.addArmy(new Army());
     let squad0 = battleSimulator.addSquadToArmy(army0, new Squad(StrategyChoices.RANDOM));
-    battleSimulator.addUnitToSquad(squad0, new Soldier(100, 200, 1));
-    battleSimulator.addUnitToSquad(squad0, new Soldier(100, 200, 0));
+    let vehicle0 = battleSimulator.addUnitToSquad(squad0, new Vehicle(100, 2000));
+    battleSimulator.addSoldierToVehicle(vehicle0, new Soldier(100, 200, 0));
 
     let army1 = battleSimulator.addArmy(new Army());
     let squad1 = battleSimulator.addSquadToArmy(army1, new Squad(StrategyChoices.RANDOM));
-    battleSimulator.addUnitToSquad(squad1, new Soldier(100, 200, 1));
-    battleSimulator.addUnitToSquad(squad1, new Soldier(100, 200, 1));
+    let vehicle1 = battleSimulator.addUnitToSquad(squad1, new Vehicle(100, 2000));
+    battleSimulator.addSoldierToVehicle(vehicle1, new Soldier(100, 200, 0));
+    
     battleSimulator.simulate();
 }
 

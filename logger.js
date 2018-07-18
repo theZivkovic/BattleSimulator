@@ -33,7 +33,7 @@ class Logger {
 
         if (includeTime){
             const elapsedTime = new Date().getTime() - Logger.startingTime;
-            fullMessage = `[${elapsedTime}] ${message}`;
+            fullMessage = `[${elapsedTime} ms] ${message}`;
         }
         else {
             fullMessage = message;

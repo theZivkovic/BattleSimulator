@@ -6,13 +6,15 @@ const { Logger } = require('./logger');
 class Vehicle extends Unit {
 
     constructor(health, rechargeTime) {
-        // TO-DO - add constraint for recharge (>1000ms)
         super(health, rechargeTime);
+        
+        if (rechargeTime < 1000)
+            throw new Error('Vehicle::constructor: rechargeTime must be in [100-2000] interval');
+            
         this._soldiers = new Array();
     }
 
     addSoldier(someSoldier){
-        // TO-DO - add limit constraints
         this._soldiers.push(someSoldier);
     }
 
@@ -54,7 +56,7 @@ class Vehicle extends Unit {
         
         this._health -= damage * Constants.VEHICLE_DAMAGE_INTAKE;
 
-        Logger.logUnit(this, `took damage of ${Constants.VEHICLE_DAMAGE_INTAKE} * ${damage.toFixed(2)} damage (the rest goes to soldier), has ${this._health.toFixed(2)} HPs left`);
+        Logger.logUnit(this, `took damage of ${Constants.VEHICLE_DAMAGE_INTAKE} * ${damage.toFixed(2)} damage (the rest goes to soldiers), has ${this._health.toFixed(2)} HPs left`);
 
         if (this._soldiers.length > 0){
 
@@ -73,7 +75,6 @@ class Vehicle extends Unit {
         }
 
         if (this._totalSoldiersHP() <= 0 || this._health <= 0) {
-            // check if the vehicle is dead and signal to higher instances
             this._eventEmmiter.emit(UNIT_DEAD, {deadUnit: this});
         }
     }
