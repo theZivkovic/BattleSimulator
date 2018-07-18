@@ -9,7 +9,7 @@ class Vehicle extends Unit {
         super(health, rechargeTime);
         
         if (rechargeTime < 1000)
-            throw new Error('Vehicle::constructor: rechargeTime must be in [100-2000] interval');
+            throw new Error('Vehicle::constructor: rechargeTime must be greated than 1000');
             
         this._soldiers = new Array();
     }

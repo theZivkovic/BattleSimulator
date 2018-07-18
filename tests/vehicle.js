@@ -5,18 +5,18 @@ const Constants = require('../constants');
 
 describe('vehicle', () => {
 
-    let vehicle0 = new Vehicle(0, 0);
+    let vehicle0 = new Vehicle(0, 1000);
     let vehicle1 = new Vehicle(0, 1000);
     let vehicle2 = new Vehicle(100, 1000);
     let vehicle3 = new Vehicle(100, 2000);
     let vehicle4 = new Vehicle(100, 1000);
-    vehicle4.addSoldier(new Soldier(100, 100, 0));
+    vehicle4.addSoldier(new Soldier(100, 1000, 0));
     let vehicle5 = new Vehicle(100, 1000);
-    vehicle5.addSoldier(new Soldier(100, 100, 0));
+    vehicle5.addSoldier(new Soldier(100, 1000, 0));
     let vehicle6 = new Vehicle(100, 1000);
-    vehicle6.addSoldier(new Soldier(100, 100, 50));
-    vehicle6.addSoldier(new Soldier(100, 100, 50));
-    vehicle6.addSoldier(new Soldier(100, 100, 50));
+    vehicle6.addSoldier(new Soldier(100, 1000, 50));
+    vehicle6.addSoldier(new Soldier(100, 1000, 50));
+    vehicle6.addSoldier(new Soldier(100, 1000, 50));
 
     let vehicles = [
         vehicle0, vehicle1, vehicle2, vehicle3,

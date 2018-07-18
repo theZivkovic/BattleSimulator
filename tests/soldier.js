@@ -5,8 +5,8 @@ const Constants = require('../constants');
 describe('soldier', () => {
 
     let soldiers = [
-        new Soldier(100, 50, 0),
-        new Soldier(0, 0, 0),
+        new Soldier(100, 100, 0),
+        new Soldier(0, 100, 0),
         new Soldier(100, 2000, 50)
     ];
 
