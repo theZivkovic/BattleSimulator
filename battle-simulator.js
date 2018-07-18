@@ -72,11 +72,11 @@ class BattleSimulator {
             Logger.logArmy(deadArmy, 'died!');
             this._armiesCache = this._armiesCache.filter(army => army.getArmyID() != deadArmy._armyID);
             this._armies.delete(deadArmy._armyID);
-            if (this._armiesCache.length <= 1){
+            if (this._armiesCache.length <= 1) {
+                this._battleOver = true;
                 Logger.logArmy(this._armiesCache[0], 'won the battle!');
                 Logger.logArmyStats(this._armiesCache[0]);
                 console.log('BATTLE OVER!');
-                this._battleOver = true;
             }
         });
         return newArmy;
@@ -89,7 +89,8 @@ class BattleSimulator {
         newSquad._squadID = newSquadID;
         newSquad._armyID = targetArmy._armyID;
         newSquad.subscribeToEvent(SQUAD_RECHARGED, ({rechargedSquad}) => {
-            this.attackWithSquad(rechargedSquad);
+            if (!this._battleOver)
+                this.attackWithSquad(rechargedSquad);
         });
         return targetArmy.addSquad(newSquad);
     }
@@ -148,7 +149,7 @@ class BattleSimulator {
             let damage = attackingSquad.computeDamage();
             targetSquad.takeDamage(damage);
             attackingSquad.increaseExperience();
-            Logger.logSquad(attackingSquad, `attacked enemy squad, dealth ${damage.toFixed(2)} damage`);
+            Logger.logSquad(attackingSquad, `attacked enemy squad, dealth ${damage.toFixed(2)} damage.`);
         }
         else 
         {
