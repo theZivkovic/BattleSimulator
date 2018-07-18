@@ -6,9 +6,14 @@ const { SQUAD_DEAD, ARMY_DEAD } = require('./battle-events');
 class Army {
 
     constructor() {
+
+        // for the fast retriveal of the squad
         this._squads = new Map();
+
+        // for iterating over squads
         this._squadsCache = new Array();
-        this._nextSquadID = 0;
+
+        // for emmiting events to higher instances
         this._eventEmmiter = new EventEmmiter();
     }
 
@@ -16,6 +21,7 @@ class Army {
         return this._armyID;
     }
 
+    /* add new squad to this army, subscribe for relevant events */
     addSquad(newSquad){
         const newSquadID = newSquad._squadID;
         this._squads.set(newSquadID, newSquad);
@@ -34,11 +40,13 @@ class Army {
         return this._squads.get(squadID);
     }
 
+    /* gets the random squad */
     getRandomSquad(){
         let randomIndex = Math.floor(Math.random() * this._squadsCache.length);
         return this._squadsCache[randomIndex];
     }
     
+    /* gets the strongest squad in the army, based on the method in Squad class */
     getStrongestSquad(attackedArmyID) {
 
         let strongestEnemySquad = null;
@@ -60,6 +68,7 @@ class Army {
         return strongestEnemySquad;
     }
 
+     /* gets the weakest squad in the army, based on the method in Squad class */
     getWeakestSquad(attackedArmyID){
 
         let weakestEnemySquad = null;
@@ -81,8 +90,7 @@ class Army {
         return weakestEnemySquad;
     }
 
-    
-
+    /* Do something for each squad */
     forEachSquad(callback){
         this._squads.forEach(callback);
     }
@@ -91,6 +99,7 @@ class Army {
         return this._armyID;
     }
 
+     /* Listen to events - used by upper management classes to listen for the unit events */
     subscribeToEvent(eventName, listener){
         this._eventEmmiter.on(eventName, listener);
     }

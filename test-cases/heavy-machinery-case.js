@@ -3,7 +3,7 @@ const Soldier = require('../soldier');
 const Vehicle = require('../vehicle');
 const Squad = require('../squad');
 const Army = require('../army');
-const StrategyChoices = require('../strategyChoices');
+const StrategyChoices = require('../strategy-choices');
 
 const runTestCase = async () => {
 

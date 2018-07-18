@@ -3,21 +3,32 @@ const Vehicle = require('./vehicle');
 const Army = require('./army');
 const Squad = require('./squad');
 const BattleSimulator = require('./battle-simulator');
-const StrategyChoices = require('./strategyChoices');
-const { askAQuestion, askAQuestionUntilRight}  = require('./questionUtil');
+const StrategyChoices = require('./strategy-choices');
+const { askAQuestion, askAQuestionUntilRight}  = require('./question-util');
 const Constants = require('./constants');
 
 const util = require('util')
 
+/* Helps building the instance of BattleSimulator in some user-friendly way */
 class BattleBuilder {
 
     constructor() {
+
     }
 
     async build() {
+
+        // clear the battle simulator 
         this._battleSimulator = null;
+
+        // clear the blueprint. This object will store
+        // the answers retrieved from the builder
         this._blueprint = {};
+
+        // generate the blueprint...
         await this._generateBlueprintByQuestions();
+
+        //..and use it to configure the simulation
         return await this._generateBattleFromBlueprint();
     }
 

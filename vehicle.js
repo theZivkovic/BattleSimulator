@@ -49,7 +49,7 @@ class Vehicle extends Unit {
 
     isActive() {
         const someSoldierAlive = this._soldiers.some(soldier => soldier.isActive());
-        return someSoldierAlive && this._health >= 0;
+        return someSoldierAlive && this._health > 0;
     }
 
     takeDamage(damage){
@@ -74,7 +74,8 @@ class Vehicle extends Unit {
             });
         }
 
-        if (this._totalSoldiersHP() <= 0 || this._health <= 0) {
+        // check if the vehicle is dead and signal it to the higher instances
+        if (!this.isActive()) {
             this._eventEmmiter.emit(UNIT_DEAD, {deadUnit: this});
         }
     }

@@ -10,6 +10,7 @@ const LOGS_PATH = './log.txt';
 
 class Logger {
 
+    /* Specifies where to log the files and defines the starting moment of logging */
     static initialize(output){
 
         Logger.startingTime = new Date().getTime();
@@ -24,6 +25,7 @@ class Logger {
         }
     }
 
+    /* Private logging method that does all the hard work here */
     static _log(message, includeTime = true) {
 
         if (!Logger.output)
@@ -52,22 +54,27 @@ class Logger {
         }
     }
 
+    /* Log something specific to unit */
     static logUnit(unit, didWhat){
         Logger._log(`ARMY#${unit._armyID}::SQUAD#${unit._squadID}::${unit.constructor.name}#${unit._unitID}: ${didWhat}`);
     }
 
+    /* Log something specific to squad */
     static logSquad(squad, didWhat){
         Logger._log(`ARMY#${squad._armyID}::SQUAD#${squad._squadID}::${didWhat}`);
     }
-
+    
+    /* Log something specific to army */
     static logArmy(army, didWhat){
         Logger._log(`ARMY#${army._armyID}::${didWhat}`);
     }
 
+    /* Log something totally free */
     static logBattle(message){
         Logger._log(message);
     }
 
+    /* Log the health statuses of squads and units in the army */
     static logArmyStats(army){
         let logString = `======== Army#${army._armyID} stats ========\n`;
         army._squads.forEach((squad) => {
