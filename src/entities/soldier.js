@@ -1,8 +1,8 @@
 const Unit = require('./unit');
-const Constants = require('./constants');
-const { randomInRange } = require('./math-util');
-const { UNIT_DEAD } = require('./battle-events');
-const { Logger } = require('./logger');
+const Constants = require('../config/constants');
+const { randomInRange } = require('../utils/math-util');
+const { Logger } = require('../utils/logger');
+const { UNIT_DEAD } = require('../enums/battle-events');
 
 class Soldier extends Unit {
 

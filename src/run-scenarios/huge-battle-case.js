@@ -1,9 +1,9 @@
-const BattleSimulator = require('../battle-simulator');
-const Soldier = require('../soldier');
-const Vehicle = require('../vehicle');
-const Squad = require('../squad');
-const Army = require('../army');
-const StrategyChoices = require('../strategy-choices');
+const BattleSimulator = require('../entities/battle-simulator');
+const Soldier = require('../entities/soldier');
+const Vehicle = require('../entities/vehicle');
+const Squad = require('../entities/squad');
+const Army = require('../entities/army');
+const StrategyChoices = require('../enums/strategy-choices');
 
 const runTestCase = async () => {
 

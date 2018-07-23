@@ -1,8 +1,8 @@
 const { expect } = require('chai');
-const Squad = require('../squad');
-const Vehicle = require('../vehicle');
-const Soldier = require('../soldier');
-const Constants = require('../constants');
+const Squad = require('../src/entities/squad');
+const Vehicle = require('../src/entities/vehicle');
+const Soldier = require('../src/entities/soldier');
+const Constants = require('../src/config/constants');
 
 describe('squad', () => {
 

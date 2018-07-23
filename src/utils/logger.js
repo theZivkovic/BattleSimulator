@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 
 const LoggerOutput = Object.freeze({
     TO_CONSOLE: 'TO_CONSOLE',
@@ -6,7 +7,8 @@ const LoggerOutput = Object.freeze({
     NO_OUTPUT: 'NO_OUTPUT'
 });
 
-const LOGS_PATH = './log.txt';
+const LOGS_DIR = 'output';
+const LOGS_PATH = path.join(LOGS_DIR, 'log.txt');
 
 class Logger {
 
@@ -18,7 +20,11 @@ class Logger {
         Logger.output = output;
         switch(Logger.output){
             case LoggerOutput.TO_CONSOLE: break;
-            case LoggerOutput.TO_FILE: 
+            case LoggerOutput.TO_FILE:
+                
+                if (!fs.existsSync(LOGS_DIR))
+                    fs.mkdirSync(LOGS_DIR);
+
                 fs.writeFile(LOGS_PATH, '', err => {if (err) console.error(err)});
                 console.log(`Note: Logs are being saved into the file ${LOGS_PATH}.\nPlease wait until BATTLE OVER! appears.`);
             case LoggerOutput.NO_OUTPUT: break;

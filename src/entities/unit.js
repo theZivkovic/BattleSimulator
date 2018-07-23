@@ -1,5 +1,5 @@
 const EventEmmiter = require('events');
-const { UNIT_RECHARGED } = require('./battle-events');
+const { UNIT_RECHARGED } = require('../enums/battle-events');
 
 class Unit {
 

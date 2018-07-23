@@ -1,6 +1,6 @@
 const { expect } = require('chai');
-const Soldier = require('../soldier');
-const Constants = require('../constants');
+const Soldier = require('../src/entities/soldier');
+const Constants = require('../src/config/constants');
 
 describe('soldier', () => {
 

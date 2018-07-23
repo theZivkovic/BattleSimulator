@@ -1,5 +1,5 @@
-const BattleSimulator = require('../battle-simulator');
-const BattleBuilder = require('../battle-builder');
+const BattleSimulator = require('../entities/battle-simulator');
+const BattleBuilder = require('../builders/battle-builder');
 
 /* This fulfilles the configuration part of the task:
 The following constraints should be configurable:

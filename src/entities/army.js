@@ -1,7 +1,7 @@
 const EventEmmiter = require('events');
-const { Logger } = require('./logger');
+const { Logger } = require('../utils/logger');
 const Squad = require('./squad');
-const { SQUAD_DEAD, ARMY_DEAD } = require('./battle-events');
+const { SQUAD_DEAD, ARMY_DEAD } = require('../enums/battle-events');
 
 class Army {
 

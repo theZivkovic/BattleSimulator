@@ -1,11 +1,11 @@
-const Soldier = require('./soldier');
-const Vehicle = require('./vehicle');
-const Army = require('./army');
-const Squad = require('./squad');
-const BattleSimulator = require('./battle-simulator');
-const StrategyChoices = require('./strategy-choices');
-const { askAQuestion, askAQuestionUntilRight}  = require('./question-util');
-const Constants = require('./constants');
+const Soldier = require('../entities/soldier');
+const Vehicle = require('../entities/vehicle');
+const Army = require('../entities/army');
+const Squad = require('../entities/squad');
+const BattleSimulator = require('../entities/battle-simulator');
+const StrategyChoices = require('../enums/strategy-choices');
+const { askAQuestion, askAQuestionUntilRight}  = require('../utils/question-util');
+const Constants = require('../config/constants');
 
 const util = require('util')
 

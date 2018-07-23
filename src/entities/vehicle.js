@@ -1,7 +1,7 @@
 const Unit = require('./unit');
-const Constants = require('./constants');
-const { UNIT_DEAD } = require('./battle-events');
-const { Logger } = require('./logger');
+const Constants = require('../config/constants');
+const { UNIT_DEAD } = require('../enums/battle-events');
+const { Logger } = require('../utils/logger');
 
 class Vehicle extends Unit {
 

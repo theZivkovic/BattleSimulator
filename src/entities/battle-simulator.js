@@ -1,8 +1,8 @@
-const { Logger } = require('./logger');
+const { Logger } = require('../utils/logger');
+const StrategyChoices = require('../enums/strategy-choices');
+const { ARMY_DEAD, SQUAD_RECHARGED } = require('../enums/battle-events');
 const Army = require('./army');
-const StrategyChoices = require('./strategy-choices');
 const Vehicle = require('./vehicle');
-const { ARMY_DEAD, SQUAD_RECHARGED } = require('./battle-events');
 
 /* The main class that manages and runs the simulation */
 class BattleSimulator {

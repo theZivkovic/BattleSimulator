@@ -1,7 +1,7 @@
-const strategyChoices = require('./strategy-choices');
 const EventEmmiter = require('events');
-const { UNIT_DEAD, UNIT_RECHARGED, SQUAD_DEAD, SQUAD_RECHARGED } = require('./battle-events');
-const { Logger } = require('./logger');
+const strategyChoices = require('../enums/strategy-choices');
+const { UNIT_DEAD, UNIT_RECHARGED, SQUAD_DEAD, SQUAD_RECHARGED } = require('../enums/battle-events');
+const { Logger } = require('../utils/logger');
 
 class Squad {
 
