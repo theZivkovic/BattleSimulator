@@ -1,5 +1,5 @@
 const { Logger, LoggerOutput } = require('./src/utils/logger');
-Logger.initialize(LoggerOutput.TO_FILE);
+Logger.initialize(LoggerOutput.TO_CONSOLE);
 
 //const runTestCase = require('./run-scenarios/make-a-custom-case');
 //const runTestCase = require('./run-scenarios/heavy-machinery-case');
